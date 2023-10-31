@@ -24,7 +24,7 @@ public class CoffeeMachineConsole {
         String action = "";
 
         while (!action.equals("exit")) {
-            System.out.println(" ");
+            System.out.println("siniša je pusho");
             System.out.println("Write action (buy, login, exit): ");
             action = sc.next();
             switch (action) {
