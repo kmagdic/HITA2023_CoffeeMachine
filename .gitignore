@@ -29,7 +29,6 @@ bin/
 .DS_Store
 /.idea/
 /.idea/
-
 /coffee_machine_status.txt
 /HITA2023_CoffeeMachine_copy.iml
 /HITA2023_CoffeeMachine.iml
