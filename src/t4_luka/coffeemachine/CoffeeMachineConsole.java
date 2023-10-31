@@ -14,7 +14,7 @@ public class CoffeeMachineConsole {
 
     void run() {
         CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
-        System.out.println("Welcome to Coffee Machine 1.0");
+        System.out.println("Welcome to Coffee Machine 1.0 version by Luka");
         boolean startedSuccessfully = machine.start();
 
         if(!startedSuccessfully) {
@@ -24,6 +24,7 @@ public class CoffeeMachineConsole {
         String action = "";
 
         while (!action.equals("exit")) {
+            System.out.println("siniša je pusho");
             System.out.println("Write action (buy, login, exit): ");
             action = sc.next();
             switch (action) {
