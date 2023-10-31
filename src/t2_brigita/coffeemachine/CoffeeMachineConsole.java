@@ -40,7 +40,7 @@ public class CoffeeMachineConsole {
                     if (machine.login(username, password)) {
                         adminMenu(machine);
                     } else {
-                        System.out.println("Wrong username or password\n");
+                        System.out.println("Wrong username or password!\n");
                     }
                     break;
 
