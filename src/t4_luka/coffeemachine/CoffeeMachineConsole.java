@@ -58,7 +58,7 @@ public class CoffeeMachineConsole {
 
     private void buyAction(CoffeeMachine machine) {
         System.out.println("Choice: ");
-        CoffeeType coffeeTypes[] = machine.getCoffeeTypes();
+        CoffeeType[] coffeeTypes = machine.getCoffeeTypes();
         for (int i = 0; i < machine.getCoffeeTypes().length; i++) {
             System.out.println((i + 1) + " - " + coffeeTypes[i].getName());
         }
@@ -75,7 +75,7 @@ public class CoffeeMachineConsole {
     private void adminMenu(CoffeeMachine machine) {
         String ch = "";
         while (!ch.equals("exit")) {
-            System.out.println("");
+            System.out.println(" ");
             System.out.println("Write action (fill, remaining, take, exit):");
             ch = sc.next();
 
