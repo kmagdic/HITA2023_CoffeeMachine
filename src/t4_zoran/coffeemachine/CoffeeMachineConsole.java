@@ -1,24 +1,24 @@
-package t4_zoran.coffeemachine;
+package coffeemachine;
 
 import java.util.Scanner;
 
 public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
-
+    String coffeeMachineStatusFileName = "src/coffeemachine/data/coffee_machine_status.txt";
 
     public static void main(String[] args)  {
         CoffeeMachineConsole console = new CoffeeMachineConsole();
-        console.run();
+        console.start();
     }
 
-    void run() {
+    void start() {
         CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
-        System.out.println("Welcome to Coffee Machine 1.0");
-        boolean startedSuccessfully = machine.start();
+        System.out.println("Welcome to Coffee Machine 1.0 version by Zoran");
 
-        if(!startedSuccessfully) {
-            System.out.println("Coffee machine started but without file. Using default values.");
+        boolean loadedSuccessfully  = machine.loadFromFile(coffeeMachineStatusFileName);
+        if(!loadedSuccessfully) {
+            System.out.println("Coffee machine status file is not found. Using default values.");
         }
 
         String action = "";
@@ -45,7 +45,7 @@ public class CoffeeMachineConsole {
                     break;
 
                 case "exit":
-                    machine.stop();
+                    machine.saveToFile(coffeeMachineStatusFileName);
                     System.out.println("Shutting down the machine. Bye!");
                     break;
 
@@ -57,7 +57,7 @@ public class CoffeeMachineConsole {
 
     private void buyAction(CoffeeMachine machine) {
         System.out.println("Choice: ");
-        CoffeeType[] coffeeTypes = machine.getCoffeeTypes();
+        CoffeeType coffeeTypes[] = machine.getCoffeeTypes();
         for (int i = 0; i < machine.getCoffeeTypes().length; i++) {
             System.out.println((i + 1) + " - " + coffeeTypes[i].getName());
         }
@@ -74,7 +74,7 @@ public class CoffeeMachineConsole {
     private void adminMenu(CoffeeMachine machine) {
         String ch = "";
         while (!ch.equals("exit")) {
-            System.out.println(" ");
+            System.out.println();
             System.out.println("Write action (fill, remaining, take, exit):");
             ch = sc.next();
 
@@ -86,7 +86,7 @@ public class CoffeeMachineConsole {
                     int milk = sc.nextInt();
                     System.out.println("Write how many grams of coffee beans you want to add:");
                     int coffeeBeans = sc.nextInt();
-                    System.out.println("\"Write how many disposable cups you want to add: ");
+                    System.out.println("Write how many disposable cups you want to add: ");
                     int cup = sc.nextInt();
                     machine.fill(water, milk, coffeeBeans, cup);
                     break;
@@ -100,7 +100,7 @@ public class CoffeeMachineConsole {
                     System.out.println("The coffee machine has:");
                     System.out.println(machine.getWater() + " ml of water");
                     System.out.println(machine.getMilk() + " ml of milk");
-                    System.out.println(machine.getCoffeeBeans() + " g of water");
+                    System.out.println(machine.getCoffeeBeans() + " g of coffeeBeans");
                     System.out.println(machine.getCups() + " cups");
                     System.out.println("$" + machine.getMoney() + " of money");
                     break;
@@ -111,7 +111,4 @@ public class CoffeeMachineConsole {
             }
         }
     }
-
-
-
 }
