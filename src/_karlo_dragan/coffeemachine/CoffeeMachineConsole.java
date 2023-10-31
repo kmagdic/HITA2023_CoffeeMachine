@@ -14,7 +14,7 @@ public class CoffeeMachineConsole {
 
     void run() {
         CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
-        System.out.println("Welcome to Coffee Machine 1.0");
+        System.out.println("Welcome to Coffee Machine 1.0 version by Karlo");
         boolean startedSuccessfully = machine.start();
 
         if(!startedSuccessfully) {
@@ -57,7 +57,7 @@ public class CoffeeMachineConsole {
 
     private void buyAction(CoffeeMachine machine) {
         System.out.println("Choice: ");
-        CoffeeType coffeeTypes[] = machine.getCoffeeTypes();
+        CoffeeType[] coffeeTypes = machine.getCoffeeTypes();
         for (int i = 0; i < machine.getCoffeeTypes().length; i++) {
             System.out.println((i + 1) + " - " + coffeeTypes[i].getName());
         }
@@ -74,7 +74,7 @@ public class CoffeeMachineConsole {
     private void adminMenu(CoffeeMachine machine) {
         String ch = "";
         while (!ch.equals("exit")) {
-            System.out.println("");
+            System.out.println(" ");
             System.out.println("Write action (fill, remaining, take, exit):");
             ch = sc.next();
 
