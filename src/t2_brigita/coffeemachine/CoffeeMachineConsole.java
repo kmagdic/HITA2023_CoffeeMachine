@@ -6,7 +6,6 @@ public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
 
-
     public static void main(String[] args)  {
         CoffeeMachineConsole console = new CoffeeMachineConsole();
         console.run();
@@ -57,8 +56,8 @@ public class CoffeeMachineConsole {
 
     private void buyAction(CoffeeMachine machine) {
         System.out.println("Choice: ");
-        CoffeeType[] coffeeTypes = machine.getCoffeeTypes();
-        for (int i = 0; i < machine.getCoffeeTypes().length; i++) {
+        CoffeeType[] coffeeTypes = machine.getCoffeeTypes().toArray(new CoffeeType[0]);
+        for (int i = 0; i < machine.getCoffeeTypes().size(); i++) {
             System.out.println((i + 1) + " - " + coffeeTypes[i].getName());
         }
         System.out.println("Enter your choice: ");
@@ -75,7 +74,7 @@ public class CoffeeMachineConsole {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, exit):");
+            System.out.println("Write action (fill, remaining, take, password, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -105,13 +104,16 @@ public class CoffeeMachineConsole {
                     System.out.println("$" + machine.getMoney() + " of money");
                     break;
 
+                case "password":
+                    System.out.println("Enter new admin password:");
+                    String newPassword = sc.next();
+                    machine.changeAdminPassword(newPassword);
+                    break;
+
                 case "exit":
                     break;
 
             }
         }
     }
-
-
-
 }
