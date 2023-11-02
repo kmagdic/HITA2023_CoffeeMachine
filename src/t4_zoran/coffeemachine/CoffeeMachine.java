@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class CoffeeMachine {
-
+    public static Scanner sc = new Scanner(System.in);
     private int water;
     private int milk;
     private int coffeeBeans;
@@ -17,7 +17,6 @@ public class CoffeeMachine {
 
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
-    private String statusFileName = "coffee_machine_status.txt";;
 
     public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) {
         this.water = water;
@@ -26,9 +25,9 @@ public class CoffeeMachine {
         this.cups = cups;
         this.money = money;
 
-        coffeeTypes[0] = new CoffeeType("Espresso", 350, 0,16,4);
-        coffeeTypes[1] = new CoffeeType("Latte",350, 75,20,7);
-        coffeeTypes[2] = new CoffeeType("Capuccino",200, 100,12,6);
+        coffeeTypes[0] = new CoffeeType("Espresso", 350, 0,16,4, 0);
+        coffeeTypes[1] = new CoffeeType("Latte",350, 75,20,7, 0);
+        coffeeTypes[2] = new CoffeeType("Capuccino",200, 100,12,6, 0);
     }
 
     public CoffeeType[] getCoffeeTypes() {
@@ -59,7 +58,7 @@ public class CoffeeMachine {
         if (water >= coffeeType.getWaterNeeded() &&
                 milk >= coffeeType.getMilkNeeded() &&
                 coffeeBeans >= coffeeType.getCoffeeBeansNeeded() &&
-                cups >= 1) {
+                cups >= coffeeType.getCupsNeeded()) {
             return true;
         } else
             return false;
@@ -96,8 +95,7 @@ public class CoffeeMachine {
         }
         else if (coffeeBeans < coffeeType.getCoffeeBeansNeeded()) {
             ingredientMissing = "coffee beans" ;
-        }
-        else if (cups < 1) {
+        }        else if (cups < coffeeType.getCupsNeeded()) {
             ingredientMissing = "cups" ;
         }
         return ingredientMissing;
@@ -166,14 +164,6 @@ public class CoffeeMachine {
     }
 
 
-    public boolean start() {
-        return loadFromFile(statusFileName);
-    }
-
-    public void stop() {
-        saveToFile(statusFileName);
-    }
-
     @Override
     public String toString() {
         return "CoffeeMachine{" +
@@ -184,6 +174,4 @@ public class CoffeeMachine {
                 ", money=" + money +
                 '}';
     }
-
-
 }
