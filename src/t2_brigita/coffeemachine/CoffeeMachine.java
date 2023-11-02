@@ -8,16 +8,16 @@ import java.util.Scanner;
 import java.util.ArrayList;
 public class CoffeeMachine {
 
-    private int water;
-    private int milk;
-    private int coffeeBeans;
-    private int cups;
-    private float money;
+    int water;
+    int milk;
+    int coffeeBeans;
+    int cups;
+    float money;
     private ArrayList<CoffeeType> coffeeTypes = new ArrayList<>();
 
-    private String adminUsername = "admin";
-    private String adminPassword = "admin12345";
-    private String statusFileName = "coffee_machine_status.txt";;
+    String adminUsername = "admin";
+    String adminPassword = "admin12345";
+    String statusFileName = "coffee_machine_status.txt";;
 
     public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) {
         this.water = water;
@@ -138,73 +138,5 @@ public class CoffeeMachine {
         }
         return password.length() >= 7 && digitCount > 0;
     }
-
-    public boolean loadFromFile(String fileName)  {
-        FileReader reader = null;
-
-        try {
-            reader = new FileReader(fileName);
-        } catch (FileNotFoundException e) {
-            return false;
-        }
-
-        Scanner fileScanner = new Scanner(reader);
-
-        // FILE format:
-        // <water_status>; <milk_status>; <coffee_beans_status>; <cups_status>; <money_status>
-        // <admin_username>; <admin_password>
-
-        fileScanner.useDelimiter("; |\n"); // delimiter is "; " or "\n" (for the last value)
-
-        water = fileScanner.nextInt();
-        milk = fileScanner.nextInt();
-        coffeeBeans = fileScanner.nextInt();
-        cups = fileScanner.nextInt();
-        money = Float.parseFloat(fileScanner.next());
-
-        adminUsername = fileScanner.next();
-        adminPassword = (fileScanner.next()).trim();
-
-        return true;
-
-
-    }
-
-    public void saveToFile(String fileName){
-        try {
-            FileWriter writer = new FileWriter(fileName);
-
-            writer.write(water + "; " +  milk + "; " + coffeeBeans + "; " + cups + "; " + money);
-            writer.write("\n");
-            writer.write(adminUsername + "; " + adminPassword);
-            writer.write("\n");
-
-            writer.close();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    public boolean start() {
-        return loadFromFile(statusFileName);
-    }
-
-    public void stop() {
-        saveToFile(statusFileName);
-    }
-
-    @Override
-    public String toString() {
-        return "CoffeeMachine{" +
-                "water=" + water +
-                ", milk=" + milk +
-                ", coffeeBeans=" + coffeeBeans +
-                ", cups=" + cups +
-                ", money=" + money +
-                '}';
-    }
-
 
 }
