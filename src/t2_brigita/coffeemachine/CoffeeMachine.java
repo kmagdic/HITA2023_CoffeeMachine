@@ -129,8 +129,14 @@ public class CoffeeMachine {
         System.out.println("Password is changed");
     }
 
-    public boolean isValidPassword(String password) {
-        return password.length() >= 7 && password.matches(".*\\d.*");
+    private boolean isValidPassword(String password) {
+        int digitCount = 0;
+        for (char character : password.toCharArray()) {
+            if (Character.isDigit(character)) {
+                digitCount++;
+            }
+        }
+        return password.length() >= 7 && digitCount > 0;
     }
 
     public boolean loadFromFile(String fileName)  {
