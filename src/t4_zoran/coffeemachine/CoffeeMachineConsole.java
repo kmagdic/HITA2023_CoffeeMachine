@@ -1,4 +1,4 @@
-package t4_zoran.coffeemachine;
+package coffeemachine;
 
 import java.util.Scanner;
 
@@ -57,7 +57,7 @@ public class CoffeeMachineConsole {
 
     private void buyAction(CoffeeMachine machine) {
         System.out.println("Choice: ");
-        CoffeeType[] coffeeTypes = machine.getCoffeeTypes();
+        CoffeeType coffeeTypes[] = machine.getCoffeeTypes();
         for (int i = 0; i < machine.getCoffeeTypes().length; i++) {
             System.out.println((i + 1) + " - " + coffeeTypes[i].getName());
         }

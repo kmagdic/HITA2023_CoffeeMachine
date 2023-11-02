@@ -55,6 +55,10 @@ public class CoffeeMachine {
         return money;
     }
 
+    public void setAdminPassword(String adminPassword) {
+        this.adminPassword = adminPassword;
+    }
+
     public boolean hasEnoughResources(CoffeeType coffeeType){
         if (water >= coffeeType.getWaterNeeded() &&
                 milk >= coffeeType.getMilkNeeded() &&
