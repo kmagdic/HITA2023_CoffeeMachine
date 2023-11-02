@@ -1,7 +1,4 @@
 package _karlo_dragan.bankclients;
-
-import org.h2.engine.User;
-
 import java.sql.*;
 
 public class BankClientConsoleMain {
