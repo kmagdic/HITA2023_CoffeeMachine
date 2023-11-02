@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class CoffeeMachine {
@@ -13,11 +15,14 @@ public class CoffeeMachine {
     private int coffeeBeans;
     private int cups;
     private float money;
-    private CoffeeType[] coffeeTypes = new CoffeeType[3];
+    private List<CoffeeType> coffeeTypesList = new ArrayList<>();
 
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
-    private String statusFileName = "coffee_machine_status.txt";;
+    private String statusFileName = "coffee_machine_status.txt";
+    CoffeeType espresso = new CoffeeType("Espresso", 350, 0, 16, 4);
+    CoffeeType latte = new CoffeeType("Latte", 350, 75, 20, 7);
+    CoffeeType cappuccino = new CoffeeType("Cappuccino", 200, 100, 12, 6);
 
     public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) {
         this.water = water;
@@ -26,13 +31,13 @@ public class CoffeeMachine {
         this.cups = cups;
         this.money = money;
 
-        coffeeTypes[0] = new CoffeeType("Espresso", 350, 0,16,4);
-        coffeeTypes[1] = new CoffeeType("Latte",350, 75,20,7);
-        coffeeTypes[2] = new CoffeeType("Capuccino",200, 100,12,6);
+        coffeeTypesList.add(espresso);
+        coffeeTypesList.add(latte);
+        coffeeTypesList.add(cappuccino);
     }
 
-    public CoffeeType[] getCoffeeTypes() {
-        return coffeeTypes;
+    public List<CoffeeType> getCoffeeTypes() {
+        return coffeeTypesList;
     }
 
     public int getWater() {
