@@ -122,6 +122,39 @@ public class CoffeeMachine {
             return false;
     }
 
+    public boolean changePassword(String password) {
+        boolean containsDigit = false;
+        boolean containsLowercase = false;
+        boolean containsUpperCase = false;
+        for (char c: password.toCharArray()) {
+            if (Character.isDigit(c)) {
+                containsDigit = true;
+                break;
+            }
+        }
+
+        for (char c: password.toCharArray()) {
+            if (Character.isLowerCase(c)) {
+                containsLowercase = true;
+                break;
+            }
+        }
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                containsUpperCase = true;
+                break;
+            }
+        }
+
+        if (password.length() >= 8 && containsDigit && containsUpperCase && containsLowercase) {
+            this.adminPassword = password;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     public boolean loadFromFile(String fileName)  {
         FileReader reader = null;

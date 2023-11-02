@@ -107,8 +107,28 @@ public class CoffeeMachineConsole {
                     System.out.println("$" + machine.getMoney() + " of money");
                     break;
 
+                case "password":
+                    boolean goodPassword;
+                    do {
+                        System.out.println("Enter new admin password: ");
+                        String password = sc.next();
+                        if (machine.changePassword(password)) {
+                            System.out.println("Password successfully changed!");
+                            goodPassword = true;
+                        } else {
+                            System.out.println("Please enter stronger password! It has to be at least" +
+                                    " 8 characters, at least one upper case letter, one lower case letter" +
+                                    " and one number.");
+                            goodPassword = false;
+                        }
+                    } while (!goodPassword);
+                    break;
+
                 case "exit":
                     break;
+
+                default:
+                    System.out.println("No such option");
 
             }
         }
