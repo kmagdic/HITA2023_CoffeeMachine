@@ -1,4 +1,4 @@
-package coffeemachine;
+package t4_zoran.coffeemachine;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

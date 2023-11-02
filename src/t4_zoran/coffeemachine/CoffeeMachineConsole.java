@@ -1,4 +1,4 @@
-package coffeemachine;
+package t4_zoran.coffeemachine;
 
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package coffeemachine;
+package t4_zoran.coffeemachine;
 
 public class CoffeeType {
 

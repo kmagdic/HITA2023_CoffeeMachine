@@ -24,7 +24,6 @@ public class CoffeeMachineConsole {
         String action = "";
 
         while (!action.equals("exit")) {
-            System.out.println("siniša je pusho");
             System.out.println("Write action (buy, login, exit): ");
             action = sc.next();
             switch (action) {
@@ -76,7 +75,7 @@ public class CoffeeMachineConsole {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, exit):");
+            System.out.println("Write action (fill, remaining, take, password, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -104,6 +103,27 @@ public class CoffeeMachineConsole {
                     System.out.println(machine.getCoffeeBeans() + " g of water");
                     System.out.println(machine.getCups() + " cups");
                     System.out.println("$" + machine.getMoney() + " of money");
+                    break;
+
+                case "password":
+                    System.out.println("Enter new admin password: ");
+                    String newPassword = sc.next();
+                    while (!(newPassword.length() > 7 && (newPassword.contains("0")
+                            || newPassword.contains("1")
+                            || newPassword.contains("2")
+                            || newPassword.contains("3")
+                            || newPassword.contains("4")
+                            || newPassword.contains("5")
+                            || newPassword.contains("6")
+                            || newPassword.contains("7")
+                            || newPassword.contains("8")
+                            || newPassword.contains("9")))){
+                        System.out.println("Please enter stronger password! It has to be a least 7 characters and it needs has at least one number.");
+                        newPassword = sc.next();
+                    }
+                    machine.setAdminPassword(newPassword);
+                    machine.saveToFile("coffee_machine_status.txt");
+                    System.out.println("Password is changed");
                     break;
 
                 case "exit":
