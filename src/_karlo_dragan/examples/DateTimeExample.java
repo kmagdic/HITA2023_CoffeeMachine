@@ -11,6 +11,7 @@ public class DateTimeExample {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
 
+
         System.out.println(simpleDateFormat.format(date));
     }
 }
