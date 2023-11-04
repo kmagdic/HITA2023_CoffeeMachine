@@ -1,0 +1,2 @@
+Date/time: 04.11.2023 21:20:26, coffee type: Latte, action: Bought
+Date/time: 04.11.2023 21:20:29, coffee type: Cappuccino, action: Not bought, not enough ingredients: water

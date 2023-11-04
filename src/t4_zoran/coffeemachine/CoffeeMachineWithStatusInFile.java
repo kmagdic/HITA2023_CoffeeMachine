@@ -8,12 +8,12 @@ import java.util.Scanner;
 
 public class CoffeeMachineWithStatusInFile extends CoffeeMachine{
 
-    public CoffeeMachineWithStatusInFile(int water, int milk, int coffeeBeans, int cups, float money) {
+    public CoffeeMachineWithStatusInFile(int water, int milk, int coffeeBeans, int cups, float money) throws IOException {
         super(water, milk, coffeeBeans, cups, money);
     }
 
     public boolean loadFromFile(String fileName)  {
-        FileReader reader = null;
+        FileReader reader;
 
         try {
             reader = new FileReader(fileName);
@@ -74,5 +74,20 @@ public class CoffeeMachineWithStatusInFile extends CoffeeMachine{
             return true;
         } else
             return false;
+    }
+
+    public void showLog() {
+
+        // Path to the log file
+        String logFilePath = "src/t4_zoran/coffeemachine/log.txt";
+
+        try (FileReader fileReader = new FileReader(logFilePath)) {
+            int character;
+            while ((character = fileReader.read()) != -1) {
+                System.out.print((char) character);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
