@@ -8,11 +8,11 @@ import java.util.Scanner;
 import java.util.ArrayList;
 public class CoffeeMachine {
 
-    int water;
-    int milk;
-    int coffeeBeans;
-    int cups;
-    float money;
+    protected int water;
+    protected int milk;
+    protected int coffeeBeans;
+    protected int cups;
+    protected float money;
     private ArrayList<CoffeeType> coffeeTypes = new ArrayList<>();
 
     String adminUsername = "admin";
@@ -139,4 +139,14 @@ public class CoffeeMachine {
         return password.length() >= 7 && digitCount > 0;
     }
 
+    @Override
+    public String toString() {
+        return "CoffeeMachine{" +
+                "water=" + water +
+                ", milk=" + milk +
+                ", coffeeBeans=" + coffeeBeans +
+                ", cups=" + cups +
+                ", money=" + money +
+                '}';
+    }
 }

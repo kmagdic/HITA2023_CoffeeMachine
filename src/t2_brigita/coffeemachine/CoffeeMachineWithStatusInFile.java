@@ -64,14 +64,4 @@ public class CoffeeMachineWithStatusInFile extends CoffeeMachine {
         saveToFile(statusFileName);
     }
 
-    @Override
-    public String toString() {
-        return "CoffeeMachine{" +
-                "water=" + water +
-                ", milk=" + milk +
-                ", coffeeBeans=" + coffeeBeans +
-                ", cups=" + cups +
-                ", money=" + money +
-                '}';
-    }
 }
