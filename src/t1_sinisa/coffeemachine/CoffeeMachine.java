@@ -17,7 +17,6 @@ public class CoffeeMachine {
     private int cups;
     private float money;
     private List<CoffeeType> coffeeTypesList = new ArrayList<>();
-    private List<Log> logList = new ArrayList<>();
 
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
@@ -42,8 +41,6 @@ public class CoffeeMachine {
     public List<CoffeeType> getCoffeeTypes() {
         return coffeeTypesList;
     }
-
-    public List<Log> getLogList() { return logList; }
 
     public int getWater() {
         return water;
@@ -77,14 +74,17 @@ public class CoffeeMachine {
 
     public void buyCoffee(CoffeeType coffeeType, Log log){
         Date date = new Date(System.currentTimeMillis());
+        DBConnection dbConnection = new DBConnection();
+        dbConnection.makeDBConnection("./coffeemachine.h2");
+        dbConnection.createSchema(dbConnection.getConn());
         if (hasEnoughResources(coffeeType)) {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
 
             log.setFormattedDate(date);
             log.setDrinkType(coffeeType.getName());
-            log.setBoughtOrNot("bought");
+            log.setBuyStatus("bought");
             log.setExplanation("");
-            logList.add(log);
+            dbConnection.addLog(log);
 
             this.water -= coffeeType.getWaterNeeded();
             this.milk -= coffeeType.getMilkNeeded();
@@ -97,9 +97,9 @@ public class CoffeeMachine {
 
             log.setFormattedDate(date);
             log.setDrinkType(coffeeType.getName());
-            log.setBoughtOrNot("not bought");
-            log.setExplanation(", not enough " + missing);
-            logList.add(log);
+            log.setBuyStatus("not bought");
+            log.setExplanation("not enough " + missing);
+            dbConnection.addLog(log);
 
         }
     }

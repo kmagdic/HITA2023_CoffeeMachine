@@ -9,7 +9,7 @@ public class Log {
 
     private String formattedDate;
     private String drinkType;
-    private String boughtOrNot;
+    private String buyStatus;
     private String explanation;
 
     public Log () {
@@ -32,13 +32,12 @@ public class Log {
         this.formattedDate = simpleDateFormat.format(date);
     }
 
-
-    public String getBoughtOrNot() {
-        return boughtOrNot;
+    public String getBuyStatus() {
+        return buyStatus;
     }
 
-    public void setBoughtOrNot(String boughtOrNot) {
-        this.boughtOrNot = boughtOrNot;
+    public void setBuyStatus(String boughtOrNot) {
+        this.buyStatus = boughtOrNot;
     }
 
     public String getExplanation() {
