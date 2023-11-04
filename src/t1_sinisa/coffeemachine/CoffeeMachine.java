@@ -4,6 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class CoffeeMachine {
@@ -13,11 +16,16 @@ public class CoffeeMachine {
     private int coffeeBeans;
     private int cups;
     private float money;
-    private CoffeeType[] coffeeTypes = new CoffeeType[3];
+    private List<CoffeeType> coffeeTypesList = new ArrayList<>();
+    private List<Log> logList = new ArrayList<>();
 
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
-    private String statusFileName = "coffee_machine_status.txt";;
+    private String statusFileName = "coffee_machine_status.txt";
+    private CoffeeType espresso = new CoffeeType("Espresso", 350, 0, 16, 4);
+    private CoffeeType latte = new CoffeeType("Latte", 350, 75, 20, 7);
+    private CoffeeType cappuccino = new CoffeeType("Cappuccino", 200, 100, 12, 6);
+    //private Log log = new Log();
 
     public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) {
         this.water = water;
@@ -26,14 +34,16 @@ public class CoffeeMachine {
         this.cups = cups;
         this.money = money;
 
-        coffeeTypes[0] = new CoffeeType("Espresso", 350, 0,16,4);
-        coffeeTypes[1] = new CoffeeType("Latte",350, 75,20,7);
-        coffeeTypes[2] = new CoffeeType("Capuccino",200, 100,12,6);
+        coffeeTypesList.add(espresso);
+        coffeeTypesList.add(latte);
+        coffeeTypesList.add(cappuccino);
     }
 
-    public CoffeeType[] getCoffeeTypes() {
-        return coffeeTypes;
+    public List<CoffeeType> getCoffeeTypes() {
+        return coffeeTypesList;
     }
+
+    public List<Log> getLogList() { return logList; }
 
     public int getWater() {
         return water;
@@ -65,9 +75,16 @@ public class CoffeeMachine {
             return false;
     }
 
-    public void buyCoffee(CoffeeType coffeeType){
+    public void buyCoffee(CoffeeType coffeeType, Log log){
+        Date date = new Date(System.currentTimeMillis());
         if (hasEnoughResources(coffeeType)) {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
+
+            log.setFormattedDate(date);
+            log.setDrinkType(coffeeType.getName());
+            log.setBoughtOrNot("bought");
+            log.setExplanation("");
+            logList.add(log);
 
             this.water -= coffeeType.getWaterNeeded();
             this.milk -= coffeeType.getMilkNeeded();
@@ -77,6 +94,13 @@ public class CoffeeMachine {
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
+
+            log.setFormattedDate(date);
+            log.setDrinkType(coffeeType.getName());
+            log.setBoughtOrNot("not bought");
+            log.setExplanation(", not enough " + missing);
+            logList.add(log);
+
         }
     }
 
@@ -115,6 +139,39 @@ public class CoffeeMachine {
             return true;
         } else
             return false;
+    }
+
+    public boolean changePassword(String password) {
+        boolean containsDigit = false;
+        boolean containsLowercase = false;
+        boolean containsUpperCase = false;
+        for (char c: password.toCharArray()) {
+            if (Character.isDigit(c)) {
+                containsDigit = true;
+                break;
+            }
+        }
+
+        for (char c: password.toCharArray()) {
+            if (Character.isLowerCase(c)) {
+                containsLowercase = true;
+                break;
+            }
+        }
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                containsUpperCase = true;
+                break;
+            }
+        }
+
+        if (password.length() >= 8 && containsDigit && containsUpperCase && containsLowercase) {
+            this.adminPassword = password;
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

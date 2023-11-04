@@ -1,5 +1,6 @@
 package t1_sinisa.coffeemachine;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class CoffeeMachineConsole {
@@ -14,7 +15,7 @@ public class CoffeeMachineConsole {
 
     void run() {
         CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
-        System.out.println("Welcome to Coffee Machine 1.0 version by Trontic!");
+        System.out.println("Welcome to Coffee Machine 1.0 version by Trontic");
         boolean startedSuccessfully = machine.start();
 
         if(!startedSuccessfully) {
@@ -56,16 +57,18 @@ public class CoffeeMachineConsole {
     }
 
     private void buyAction(CoffeeMachine machine) {
+        Log log = new Log();
         System.out.println("Choice: ");
-        CoffeeType[] coffeeTypes = machine.getCoffeeTypes();
-        for (int i = 0; i < machine.getCoffeeTypes().length; i++) {
-            System.out.println((i + 1) + " - " + coffeeTypes[i].getName());
+        List<CoffeeType> coffeeTypesList = machine.getCoffeeTypes();
+        for (int i = 0; i < machine.getCoffeeTypes().size(); i++) {
+            CoffeeType coffeeType = coffeeTypesList.get(i);
+            System.out.println((i + 1) + " - " + coffeeType.getName());
         }
         System.out.println("Enter your choice: ");
 
         int typeOfCoffeeChoice = sc.nextInt();
-        if (typeOfCoffeeChoice <= coffeeTypes.length) {
-            machine.buyCoffee(coffeeTypes[typeOfCoffeeChoice - 1]);
+        if (typeOfCoffeeChoice <= coffeeTypesList.size()) {
+            machine.buyCoffee(coffeeTypesList.get(typeOfCoffeeChoice-1), log);
         } else {
             System.out.println("Wrong enter\n");
         }
@@ -75,7 +78,7 @@ public class CoffeeMachineConsole {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, exit):");
+            System.out.println("Write action (fill, remaining, take, password, log, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -100,13 +103,43 @@ public class CoffeeMachineConsole {
                     System.out.println("The coffee machine has:");
                     System.out.println(machine.getWater() + " ml of water");
                     System.out.println(machine.getMilk() + " ml of milk");
-                    System.out.println(machine.getCoffeeBeans() + " g of water");
+                    System.out.println(machine.getCoffeeBeans() + " g of beans");
                     System.out.println(machine.getCups() + " cups");
                     System.out.println("$" + machine.getMoney() + " of money");
                     break;
 
+                case "password":
+                    boolean goodPassword;
+                    do {
+                        System.out.println("Enter new admin password: ");
+                        String password = sc.next();
+                        if (machine.changePassword(password)) {
+                            System.out.println("Password successfully changed!");
+                            goodPassword = true;
+                        } else {
+                            System.out.println("Please enter stronger password! It has to be at least" +
+                                    " 8 characters, at least one upper case letter, one lower case letter" +
+                                    " and one number.");
+                            goodPassword = false;
+                        }
+                    } while (!goodPassword);
+                    break;
+
+                case "log":
+                    System.out.println("Transaction log: ");
+                    for (Log log : machine.getLogList()) {
+                        System.out.println("Date/time: " + log.getFormattedDate()
+                                         + ", coffee type: " + log.getDrinkType()
+                                         + ", action: " + log.getBoughtOrNot()
+                                         + log.getExplanation());
+                    }
+                    break;
+
                 case "exit":
                     break;
+
+                default:
+                    System.out.println("No such option");
 
             }
         }
