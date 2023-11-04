@@ -1,20 +1,21 @@
 package t4_zoran.coffeemachine;
 
+import java.io.*;
 import java.util.Scanner;
 
 public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
-    String coffeeMachineStatusFileName = "src/coffeemachine/data/coffee_machine_status.txt";
+    String coffeeMachineStatusFileName = "src/t4_zoran/coffeemachine/coffee_machine_status.txt";
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws IOException {
         CoffeeMachineConsole console = new CoffeeMachineConsole();
         console.start();
     }
 
-    void start() {
-        CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
-        System.out.println("Welcome to Coffee Machine 1.0 version by Zoran");
+    void start() throws IOException {
+        CoffeeMachineWithStatusInFile machine = new CoffeeMachineWithStatusInFile(400, 540, 120, 9, 550);
+        System.out.println("Welcome to Coffee Machine 2.1 version by Zoran");
 
         boolean loadedSuccessfully  = machine.loadFromFile(coffeeMachineStatusFileName);
         if(!loadedSuccessfully) {
@@ -27,37 +28,30 @@ public class CoffeeMachineConsole {
             System.out.println("Write action (buy, login, exit): ");
             action = sc.next();
             switch (action) {
-                case "buy":
-                    buyAction(machine);
-                    break;
-
-                case "login":
+                case "buy" -> buyAction(machine);
+                case "login" -> {
                     System.out.println("Enter username: ");
                     String username = sc.next();
                     System.out.println("Enter password: ");
                     String password = sc.next();
-
                     if (machine.login(username, password)) {
                         adminMenu(machine);
                     } else {
                         System.out.println("Wrong username or password\n");
                     }
-                    break;
-
-                case "exit":
+                }
+                case "exit" -> {
                     machine.saveToFile(coffeeMachineStatusFileName);
                     System.out.println("Shutting down the machine. Bye!");
-                    break;
-
-                default:
-                    System.out.println("No such option");
+                }
+                default -> System.out.println("No such option");
             }
         }
     }
 
     private void buyAction(CoffeeMachine machine) {
         System.out.println("Choice: ");
-        CoffeeType coffeeTypes[] = machine.getCoffeeTypes();
+        CoffeeType[] coffeeTypes = machine.getCoffeeTypes();
         for (int i = 0; i < machine.getCoffeeTypes().length; i++) {
             System.out.println((i + 1) + " - " + coffeeTypes[i].getName());
         }
@@ -71,11 +65,11 @@ public class CoffeeMachineConsole {
         }
     }
 
-    private void adminMenu(CoffeeMachine machine) {
+    private void adminMenu(CoffeeMachineWithStatusInFile machine) {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println();
-            System.out.println("Write action (fill, remaining, take, exit):");
+            System.out.println("Write action (fill, remaining, take, password, log, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -93,7 +87,7 @@ public class CoffeeMachineConsole {
 
                 case "take":
                     float amount = machine.takeMoney();
-                    System.out.println("I gave you $" + amount + "\n");
+                    System.out.println("I gave you $" + amount);
                     break;
 
                 case "remaining":
@@ -105,9 +99,31 @@ public class CoffeeMachineConsole {
                     System.out.println("$" + machine.getMoney() + " of money");
                     break;
 
-                case "exit":
+                case "password":
+                    System.out.println("Enter new admin password:");
+                    String newPassword;
+                    boolean isStrong = false;
+                    while (!isStrong) {
+                        newPassword = sc.next();
+                        if (machine.passwordIsStrong(newPassword)) {
+                            machine.saveToFile(coffeeMachineStatusFileName);
+                            System.out.println("Password is changed");
+                            isStrong = true;
+                        }
+                        else {
+                            System.out.println("Please enter stronger password! " +
+                                    "It has to be a least 7 characters and it needs has at least one number.");
+                        }
+                    }
                     break;
 
+                case "log":
+                    System.out.println("Transaction log:");
+                    machine.showLog();
+                    break;
+
+                case "exit":
+                    break;
             }
         }
     }

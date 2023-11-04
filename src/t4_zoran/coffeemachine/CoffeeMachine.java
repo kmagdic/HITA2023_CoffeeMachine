@@ -1,33 +1,65 @@
 package t4_zoran.coffeemachine;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.logging.*;
+import java.util.logging.Formatter;
+
+class CustomFormatter extends Formatter {
+    @Override
+    public String format(LogRecord record) {
+        return record.getMessage() + "\n";
+    }
+}
 
 public class CoffeeMachine {
+    private static final Logger logger = Logger.getLogger("t4_zoran.coffeemachine.CoffeeMachine");
+
+    static {
+        try {
+            // Remove the default console handler
+            Logger rootLogger = Logger.getLogger("");
+            Handler[] handlers = rootLogger.getHandlers();
+            for (Handler handler : handlers) {
+                if (handler instanceof ConsoleHandler) {
+                    rootLogger.removeHandler(handler);
+                }
+            }
+
+            FileHandler fileHandler = new FileHandler("src/t4_zoran/coffeemachine/log.txt");
+            fileHandler.setFormatter(new CustomFormatter());
+
+            logger.addHandler(fileHandler);
+            logger.setLevel(Level.INFO);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static Scanner sc = new Scanner(System.in);
+
     private int water;
     private int milk;
     private int coffeeBeans;
     private int cups;
     private float money;
-    private CoffeeType[] coffeeTypes = new CoffeeType[3];
+    private final CoffeeType[] coffeeTypes = new CoffeeType[3];
 
     private String adminUsername = "admin";
-    private String adminPassword = "admin12345";
+    private String adminPassword = "admin123";
 
-    public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) {
+    public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) throws IOException {
         this.water = water;
         this.milk = milk;
         this.coffeeBeans = coffeeBeans;
         this.cups = cups;
         this.money = money;
 
-        coffeeTypes[0] = new CoffeeType("Espresso", 350, 0,16,4, 0);
-        coffeeTypes[1] = new CoffeeType("Latte",350, 75,20,7, 0);
-        coffeeTypes[2] = new CoffeeType("Capuccino",200, 100,12,6, 0);
+        coffeeTypes[0] = new CoffeeType("Espresso", 350, 0, 16, 4);
+        coffeeTypes[1] = new CoffeeType("Latte",350, 75, 20, 7);
+        coffeeTypes[2] = new CoffeeType("Cappuccino", 200, 100, 12, 6);
     }
 
     public CoffeeType[] getCoffeeTypes() {
@@ -54,19 +86,66 @@ public class CoffeeMachine {
         return money;
     }
 
+    public String getAdminUsername() {
+        return adminUsername;
+    }
+
+    public String getAdminPassword() {
+        return adminPassword;
+    }
+
+    public void setWater(int water) {
+        this.water = water;
+    }
+
+    public static void setSc(Scanner sc) {
+        CoffeeMachine.sc = sc;
+    }
+
+    public void setMilk(int milk) {
+        this.milk = milk;
+    }
+
+    public void setCoffeeBeans(int coffeeBeans) {
+        this.coffeeBeans = coffeeBeans;
+    }
+
+    public void setCups(int cups) {
+        this.cups = cups;
+    }
+
+    public void setMoney(float money) {
+        this.money = money;
+    }
+
+    public void setAdminUsername(String adminUsername) {
+        this.adminUsername = adminUsername;
+    }
+
+    public void setAdminPassword(String adminPassword) {
+        this.adminPassword = adminPassword;
+    }
+
     public boolean hasEnoughResources(CoffeeType coffeeType){
-        if (water >= coffeeType.getWaterNeeded() &&
+        return water >= coffeeType.getWaterNeeded() &&
                 milk >= coffeeType.getMilkNeeded() &&
                 coffeeBeans >= coffeeType.getCoffeeBeansNeeded() &&
-                cups >= coffeeType.getCupsNeeded()) {
-            return true;
-        } else
-            return false;
+                cups >= coffeeType.getCupsNeeded();
+    }
+
+    private String getFormattedDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
     public void buyCoffee(CoffeeType coffeeType){
         if (hasEnoughResources(coffeeType)) {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
+
+            String logMessage = "Date/time: " + getFormattedDateTime() + ", coffee type: " +
+                                 coffeeType.getName() + ", action: Bought";
+            logger.info(logMessage);
 
             this.water -= coffeeType.getWaterNeeded();
             this.milk -= coffeeType.getMilkNeeded();
@@ -76,6 +155,10 @@ public class CoffeeMachine {
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
+
+            String logMessage = "Date/time: " + getFormattedDateTime() + ", coffee type: " + coffeeType.getName() +
+                                ", action: Not bought, not enough ingredients: " + missing;
+            logger.info(logMessage);
         }
     }
 
@@ -109,60 +192,8 @@ public class CoffeeMachine {
     }
 
     public boolean login(String username, String password) {
-        if (adminUsername.equals(username) && adminPassword.equals(password)) {
-            return true;
-        } else
-            return false;
+        return adminUsername.equals(username) && adminPassword.equals(password.trim());
     }
-
-
-    public boolean loadFromFile(String fileName)  {
-        FileReader reader = null;
-
-        try {
-            reader = new FileReader(fileName);
-        } catch (FileNotFoundException e) {
-            return false;
-        }
-
-        Scanner fileScanner = new Scanner(reader);
-
-        // FILE format:
-        // <water_status>; <milk_status>; <coffee_beans_status>; <cups_status>; <money_status>
-        // <admin_username>; <admin_password>
-
-        fileScanner.useDelimiter("; |\n"); // delimiter is "; " or "\n" (for the last value)
-
-        water = fileScanner.nextInt();
-        milk = fileScanner.nextInt();
-        coffeeBeans = fileScanner.nextInt();
-        cups = fileScanner.nextInt();
-        money = Float.parseFloat(fileScanner.next());
-
-        adminUsername = fileScanner.next();
-        adminPassword = (fileScanner.next()).trim();
-
-        return true;
-
-
-    }
-
-    public void saveToFile(String fileName){
-        try {
-            FileWriter writer = new FileWriter(fileName);
-
-            writer.write(water + "; " +  milk + "; " + coffeeBeans + "; " + cups + "; " + money);
-            writer.write("\n");
-            writer.write(adminUsername + "; " + adminPassword);
-            writer.write("\n");
-
-            writer.close();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 
     @Override
     public String toString() {
