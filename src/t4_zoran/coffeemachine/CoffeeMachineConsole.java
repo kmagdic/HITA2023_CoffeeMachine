@@ -14,7 +14,7 @@ public class CoffeeMachineConsole {
 
     void start() {
         CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
-        System.out.println("Welcome to Coffee Machine 1.0 version by Zoran");
+        System.out.println("Welcome to Coffee Machine 2.0 version by Zoran");
 
         boolean loadedSuccessfully  = machine.loadFromFile(coffeeMachineStatusFileName);
         if(!loadedSuccessfully) {
