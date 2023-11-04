@@ -128,7 +128,7 @@ public class CoffeeMachineConsole {
 
                 case "log":
                     for (Transaction t: machine.logList)
-                    System.out.println(t.getDate() + " "+  t.getWhatHappened());
+                    System.out.println(t.getCroatianDateStr() + " "+  t.getWhatHappened());
                     break;
 
                 case "exit":
