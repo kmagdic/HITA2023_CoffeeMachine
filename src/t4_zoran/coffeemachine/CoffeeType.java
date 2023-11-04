@@ -10,11 +10,11 @@ public class CoffeeType {
     private String name;
 
 
-    public CoffeeType(String name, int waterNeeded, int milkNeeded, int coffeeBeansNeeded, int cupsNeeded, int price) {
+    public CoffeeType(String name, int waterNeeded, int milkNeeded, int coffeeBeansNeeded, int price) {
         this.milkNeeded = milkNeeded;
         this.waterNeeded = waterNeeded;
         this.coffeeBeansNeeded = coffeeBeansNeeded;
-        this.cupsNeeded = coffeeBeansNeeded;
+        this.cupsNeeded = 1;
         this.price = price;
         this.name = name;
     }

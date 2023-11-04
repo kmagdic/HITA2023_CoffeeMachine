@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
-    String coffeeMachineStatusFileName = "src/coffeemachine/data/coffee_machine_status.txt";
+    String coffeeMachineStatusFileName = "src/t4_zoran/coffeemachine/coffee_machine_status.txt";
 
     public static void main(String[] args)  {
         CoffeeMachineConsole console = new CoffeeMachineConsole();
@@ -13,7 +13,7 @@ public class CoffeeMachineConsole {
     }
 
     void start() {
-        CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
+        CoffeeMachineWithStatusInFile machine = new CoffeeMachineWithStatusInFile(400, 540, 120, 9, 550);
         System.out.println("Welcome to Coffee Machine 2.0 version by Zoran");
 
         boolean loadedSuccessfully  = machine.loadFromFile(coffeeMachineStatusFileName);
@@ -71,11 +71,11 @@ public class CoffeeMachineConsole {
         }
     }
 
-    private void adminMenu(CoffeeMachine machine) {
+    private void adminMenu(CoffeeMachineWithStatusInFile machine) {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println();
-            System.out.println("Write action (fill, remaining, take, exit):");
+            System.out.println("Write action (fill, remaining, take, password, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -105,9 +105,25 @@ public class CoffeeMachineConsole {
                     System.out.println("$" + machine.getMoney() + " of money");
                     break;
 
+                case "password":
+                    System.out.println("Enter new admin password:");
+                    String newPassword = "";
+                    boolean isStrong = false;
+                    while (!isStrong) {
+                        newPassword = sc.next();
+                        if (machine.passwordIsStrong(newPassword)) {
+                            machine.saveToFile(coffeeMachineStatusFileName);
+                            System.out.println("Password is changed");
+                            isStrong = true;
+                        }
+                        else {
+                            System.out.println("Please enter stronger password! " +
+                                    "It has to be a least 7 characters and it needs has at least one number.");
+                        }
+                    }
+
                 case "exit":
                     break;
-
             }
         }
     }
