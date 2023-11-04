@@ -57,6 +57,7 @@ public class CoffeeMachineConsole {
     }
 
     private void buyAction(CoffeeMachine machine) {
+        Log log = new Log();
         System.out.println("Choice: ");
         List<CoffeeType> coffeeTypesList = machine.getCoffeeTypes();
         for (int i = 0; i < machine.getCoffeeTypes().size(); i++) {
@@ -67,7 +68,7 @@ public class CoffeeMachineConsole {
 
         int typeOfCoffeeChoice = sc.nextInt();
         if (typeOfCoffeeChoice <= coffeeTypesList.size()) {
-            machine.buyCoffee(coffeeTypesList.get(typeOfCoffeeChoice-1));
+            machine.buyCoffee(coffeeTypesList.get(typeOfCoffeeChoice-1), log);
         } else {
             System.out.println("Wrong enter\n");
         }
@@ -77,7 +78,7 @@ public class CoffeeMachineConsole {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, password, exit):");
+            System.out.println("Write action (fill, remaining, take, password, log, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -122,6 +123,16 @@ public class CoffeeMachineConsole {
                             goodPassword = false;
                         }
                     } while (!goodPassword);
+                    break;
+
+                case "log":
+                    System.out.println("Transaction log: ");
+                    for (Log log : machine.getLogList()) {
+                        System.out.println("Date/time: " + log.getFormattedDate()
+                                         + ", coffee type: " + log.getDrinkType()
+                                         + ", action: " + log.getBoughtOrNot()
+                                         + log.getExplanation());
+                    }
                     break;
 
                 case "exit":

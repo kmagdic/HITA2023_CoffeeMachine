@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,13 +17,15 @@ public class CoffeeMachine {
     private int cups;
     private float money;
     private List<CoffeeType> coffeeTypesList = new ArrayList<>();
+    private List<Log> logList = new ArrayList<>();
 
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
     private String statusFileName = "coffee_machine_status.txt";
-    CoffeeType espresso = new CoffeeType("Espresso", 350, 0, 16, 4);
-    CoffeeType latte = new CoffeeType("Latte", 350, 75, 20, 7);
-    CoffeeType cappuccino = new CoffeeType("Cappuccino", 200, 100, 12, 6);
+    private CoffeeType espresso = new CoffeeType("Espresso", 350, 0, 16, 4);
+    private CoffeeType latte = new CoffeeType("Latte", 350, 75, 20, 7);
+    private CoffeeType cappuccino = new CoffeeType("Cappuccino", 200, 100, 12, 6);
+    //private Log log = new Log();
 
     public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) {
         this.water = water;
@@ -39,6 +42,8 @@ public class CoffeeMachine {
     public List<CoffeeType> getCoffeeTypes() {
         return coffeeTypesList;
     }
+
+    public List<Log> getLogList() { return logList; }
 
     public int getWater() {
         return water;
@@ -70,9 +75,16 @@ public class CoffeeMachine {
             return false;
     }
 
-    public void buyCoffee(CoffeeType coffeeType){
+    public void buyCoffee(CoffeeType coffeeType, Log log){
+        Date date = new Date(System.currentTimeMillis());
         if (hasEnoughResources(coffeeType)) {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
+
+            log.setFormattedDate(date);
+            log.setDrinkType(coffeeType.getName());
+            log.setBoughtOrNot("bought");
+            log.setExplanation("");
+            logList.add(log);
 
             this.water -= coffeeType.getWaterNeeded();
             this.milk -= coffeeType.getMilkNeeded();
@@ -82,6 +94,13 @@ public class CoffeeMachine {
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
+
+            log.setFormattedDate(date);
+            log.setDrinkType(coffeeType.getName());
+            log.setBoughtOrNot("not bought");
+            log.setExplanation(", not enough " + missing);
+            logList.add(log);
+
         }
     }
 
