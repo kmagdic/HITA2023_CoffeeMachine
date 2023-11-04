@@ -53,6 +53,8 @@ public class DBConnection {
             pstmt.setString(3, log.getBuyStatus());
             pstmt.setString(4, log.getExplanation());
             pstmt.executeUpdate();
+
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -73,6 +75,9 @@ public class DBConnection {
                         + ", " + resultSet.getString("explanation"));
 
             }
+            resultSet.close();
+            stmt.close();
+            conn.close();
 
         } catch(SQLException e) {
             System.out.println(e.getMessage());
