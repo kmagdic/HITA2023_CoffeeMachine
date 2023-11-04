@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 public class CoffeeMachine {
 
     protected int water;
@@ -14,10 +16,11 @@ public class CoffeeMachine {
     protected int cups;
     protected float money;
     private ArrayList<CoffeeType> coffeeTypes = new ArrayList<>();
+    private ArrayList<String> transactionLog = new ArrayList<>();
 
     String adminUsername = "admin";
     String adminPassword = "admin12345";
-    String statusFileName = "coffee_machine_status.txt";;
+    String statusFileName = "coffee_machine_status.txt";
 
     public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) {
         this.water = water;
@@ -75,9 +78,14 @@ public class CoffeeMachine {
             this.coffeeBeans -= coffeeType.getCoffeeBeansNeeded();
             this.money += coffeeType.getPrice();
             this.cups -= 1;
+
+            logTransaction(coffeeType, "Bought");
+
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
+
+            logTransaction(coffeeType, "Not bought, not enough ingredients: " + missing);
         }
     }
 
@@ -121,7 +129,8 @@ public class CoffeeMachine {
     public void changeAdminPassword(String newPassword) {
         Scanner sc = new Scanner(System.in);
         while (!isValidPassword(newPassword)) {
-            System.out.println("Please enter a stronger password! It has to be at least 7 characters and must contain at least one number.");
+            System.out.println("Please enter a stronger password! It has to be at least 7 characters and must contain " +
+                    "at least one number.");
             System.out.println("Enter new admin password:");
             newPassword = sc.next();
         }
@@ -137,6 +146,20 @@ public class CoffeeMachine {
             }
         }
         return password.length() >= 7 && digitCount > 0;
+    }
+
+    private void logTransaction(CoffeeType coffeeType, String action) {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        String logEntry = "Date/time: " + dateFormat.format(date) + ", coffee type: " + coffeeType.getName() + ", action: "
+                + action;
+        transactionLog.add(logEntry);
+    }
+
+    public void viewTransactionLog() {
+        for (String entry : transactionLog) {
+            System.out.println(entry);
+        }
     }
 
     @Override

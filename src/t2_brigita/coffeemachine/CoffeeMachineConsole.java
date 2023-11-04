@@ -111,7 +111,9 @@ public class CoffeeMachineConsole {
                     break;
 
                 case "log":
-
+                    System.out.println("Transaction log: ");
+                    machine.viewTransactionLog();
+                    break;
 
                 case "exit":
                     break;
