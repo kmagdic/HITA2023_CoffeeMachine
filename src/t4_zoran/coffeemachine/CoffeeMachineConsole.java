@@ -6,16 +6,20 @@ import java.util.Scanner;
 public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
-    String coffeeMachineStatusFileName = "src/t4_zoran/coffeemachine/coffee_machine_status.txt";
+    String coffeeMachineStatusFileName = "src/t4_zoran/coffeemachine/data/coffee_machine_status.txt";
 
     public static void main(String[] args) throws IOException {
+
+        // Configure Logback to use the "logback.xml" file in the project's root directory
+        System.setProperty("logback.configurationFile", "src/t4_zoran/coffeemachine/data/logback.xml");
+
         CoffeeMachineConsole console = new CoffeeMachineConsole();
         console.start();
     }
 
     void start() throws IOException {
         CoffeeMachineWithStatusInFile machine = new CoffeeMachineWithStatusInFile(400, 540, 120, 9, 550);
-        System.out.println("Welcome to Coffee Machine 2.1 version by Zoran");
+        System.out.println("Welcome to Coffee Machine 2.1.1 version by Zoran");
 
         boolean loadedSuccessfully  = machine.loadFromFile(coffeeMachineStatusFileName);
         if(!loadedSuccessfully) {

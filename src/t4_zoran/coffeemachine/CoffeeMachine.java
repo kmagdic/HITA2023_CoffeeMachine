@@ -3,40 +3,12 @@ package t4_zoran.coffeemachine;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.*;
-import java.util.logging.Formatter;
 
-class CustomFormatter extends Formatter {
-    @Override
-    public String format(LogRecord record) {
-        return record.getMessage() + "\n";
-    }
-}
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CoffeeMachine {
-    private static final Logger logger = Logger.getLogger("t4_zoran.coffeemachine.CoffeeMachine");
-
-    static {
-        try {
-            // Remove the default console handler
-            Logger rootLogger = Logger.getLogger("");
-            Handler[] handlers = rootLogger.getHandlers();
-            for (Handler handler : handlers) {
-                if (handler instanceof ConsoleHandler) {
-                    rootLogger.removeHandler(handler);
-                }
-            }
-
-            FileHandler fileHandler = new FileHandler("src/t4_zoran/coffeemachine/log.txt");
-            fileHandler.setFormatter(new CustomFormatter());
-
-            logger.addHandler(fileHandler);
-            logger.setLevel(Level.INFO);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    private static final Logger logger = LoggerFactory.getLogger(CoffeeMachine.class);
 
     public static Scanner sc = new Scanner(System.in);
 
