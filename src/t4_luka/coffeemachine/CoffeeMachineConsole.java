@@ -75,7 +75,7 @@ public class CoffeeMachineConsole {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, password, exit):");
+            System.out.println("Write action (fill, remaining, take, password, log, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -124,6 +124,11 @@ public class CoffeeMachineConsole {
                     machine.setAdminPassword(newPassword);
                     machine.saveToFile("coffee_machine_status.txt");
                     System.out.println("Password is changed");
+                    break;
+
+                case "log":
+                    for (Transaction t: machine.logList)
+                    System.out.println(t.getCroatianDateStr() + " "+  t.getWhatHappened());
                     break;
 
                 case "exit":

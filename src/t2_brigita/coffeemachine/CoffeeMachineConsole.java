@@ -74,7 +74,7 @@ public class CoffeeMachineConsole {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, password, exit):");
+            System.out.println("Write action (fill, remaining, take, password, log, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -108,6 +108,11 @@ public class CoffeeMachineConsole {
                     System.out.println("Enter new admin password:");
                     String newPassword = sc.next();
                     machine.changeAdminPassword(newPassword);
+                    break;
+
+                case "log":
+                    System.out.println("Transaction log: ");
+                    machine.viewTransactionLog();
                     break;
 
                 case "exit":

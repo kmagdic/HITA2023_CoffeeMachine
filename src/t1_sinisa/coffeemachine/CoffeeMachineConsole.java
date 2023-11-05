@@ -127,12 +127,9 @@ public class CoffeeMachineConsole {
 
                 case "log":
                     System.out.println("Transaction log: ");
-                    for (Log log : machine.getLogList()) {
-                        System.out.println("Date/time: " + log.getFormattedDate()
-                                         + ", coffee type: " + log.getDrinkType()
-                                         + ", action: " + log.getBoughtOrNot()
-                                         + log.getExplanation());
-                    }
+                    DBConnection dbConnection = new DBConnection();
+                    dbConnection.makeDBConnection("./coffeemachine.h2");
+                    dbConnection.readLog();
                     break;
 
                 case "exit":
