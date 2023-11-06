@@ -93,6 +93,9 @@ public class CoffeeMachine {
                 String coffeeType = rezultat.getString("coffee_type");
                 String action = rezultat.getString("action");
                 System.out.println(dateTime + " " + coffeeType + " " + action);
+                rezultat.close();
+                statement.close();
+                conn.close();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
