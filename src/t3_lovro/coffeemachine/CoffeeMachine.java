@@ -4,7 +4,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
+import java.sql.*;
 
 public class CoffeeMachine {
 
@@ -17,7 +23,9 @@ public class CoffeeMachine {
 
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
-    private String statusFileName = "coffee_machine_status.txt";;
+    private String statusFileName = "coffee_machine_status.txt";
+    private static Connection conn;
+
 
     public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) {
         this.water = water;
@@ -26,9 +34,70 @@ public class CoffeeMachine {
         this.cups = cups;
         this.money = money;
 
-        coffeeTypes[0] = new CoffeeType("Espresso", 350, 0,16,4);
-        coffeeTypes[1] = new CoffeeType("Latte",350, 75,20,7);
-        coffeeTypes[2] = new CoffeeType("Capuccino",200, 100,12,6);
+        coffeeTypes[0] = new CoffeeType("Espresso", 350, 0, 16, 4);
+        coffeeTypes[1] = new CoffeeType("Latte", 350, 75, 20, 7);
+        coffeeTypes[2] = new CoffeeType("Capuccino", 200, 100, 12, 6);
+
+        makeDBConnection("./coffeemachine.h2");
+        createSchema(conn);
+
+
+    }
+
+    private static void makeDBConnection(String fileName) {
+        try {
+            conn = DriverManager.getConnection("jdbc:h2:" + fileName);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void createSchema(Connection conn) {
+        String createTableSql =
+                "CREATE TABLE IF NOT EXISTS machine_log (\n" +
+                        "    id INT AUTO_INCREMENT PRIMARY KEY,\n" +
+                        "    date_time VARCHAR(100) NOT NULL,\n" +
+                        "    coffee_type VARCHAR(255) NOT NULL,\n" +
+                        "    action VARCHAR(255) NOT NULL\n" +
+                        ");";
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.execute(createTableSql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public static void addToLog(CoffeeType coffeeType, String action) {
+        String sql = "INSERT INTO machine_log(date_time, coffee_type, action) VALUES(?, ?, ?)";
+        java.util.Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, simpleDateFormat.format(date));
+            pstmt.setString(2, coffeeType.getName());
+            pstmt.setString(3, action);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void readingFromDB() {
+        Statement statement;
+        try {
+            statement = conn.createStatement();
+
+            String sqlUpit = "SELECT date_time, coffee_type, action FROM machine_log";
+            ResultSet rezultat = statement.executeQuery(sqlUpit);
+            while (rezultat.next()) {
+                String dateTime = rezultat.getString("date_time");
+                String coffeeType = rezultat.getString("coffee_type");
+                String action = rezultat.getString("action");
+                System.out.println(dateTime + " " + coffeeType + " " + action);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public CoffeeType[] getCoffeeTypes() {
@@ -55,7 +124,7 @@ public class CoffeeMachine {
         return money;
     }
 
-    public boolean hasEnoughResources(CoffeeType coffeeType){
+    public boolean hasEnoughResources(CoffeeType coffeeType) {
         if (water >= coffeeType.getWaterNeeded() &&
                 milk >= coffeeType.getMilkNeeded() &&
                 coffeeBeans >= coffeeType.getCoffeeBeansNeeded() &&
@@ -65,7 +134,7 @@ public class CoffeeMachine {
             return false;
     }
 
-    public void buyCoffee(CoffeeType coffeeType){
+    public void buyCoffee(CoffeeType coffeeType) {
         if (hasEnoughResources(coffeeType)) {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
 
@@ -74,36 +143,35 @@ public class CoffeeMachine {
             this.coffeeBeans -= coffeeType.getCoffeeBeansNeeded();
             this.money += coffeeType.getPrice();
             this.cups -= 1;
+            CoffeeMachine.addToLog(coffeeType, "Bought");
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
+            CoffeeMachine.addToLog(coffeeType, "Not bought, no enough ingridients: " + missing);
             System.out.println("Sorry, not enough " + missing + "\n");
         }
     }
 
-    public float takeMoney(){
+    public float takeMoney() {
         float moneyReturn = money;
         money = 0;
         return moneyReturn;
     }
 
-    public String calculateWhichIngredientIsMissing(CoffeeType coffeeType){
+    public String calculateWhichIngredientIsMissing(CoffeeType coffeeType) {
         String ingredientMissing = null;
         if (water < coffeeType.getWaterNeeded()) {
             ingredientMissing = "water";
-        }
-        else if (milk < coffeeType.getMilkNeeded()) {
-            ingredientMissing = "milk" ;
-        }
-        else if (coffeeBeans < coffeeType.getCoffeeBeansNeeded()) {
-            ingredientMissing = "coffee beans" ;
-        }
-        else if (cups < 1) {
-            ingredientMissing = "cups" ;
+        } else if (milk < coffeeType.getMilkNeeded()) {
+            ingredientMissing = "milk";
+        } else if (coffeeBeans < coffeeType.getCoffeeBeansNeeded()) {
+            ingredientMissing = "coffee beans";
+        } else if (cups < 1) {
+            ingredientMissing = "cups";
         }
         return ingredientMissing;
     }
 
-    public void fill(int water, int milk, int coffeeBeans, int cups){
+    public void fill(int water, int milk, int coffeeBeans, int cups) {
         this.water += water;
         this.milk += milk;
         this.coffeeBeans += coffeeBeans;
@@ -118,7 +186,7 @@ public class CoffeeMachine {
     }
 
 
-    public boolean loadFromFile(String fileName)  {
+    public boolean loadFromFile(String fileName) {
         FileReader reader = null;
 
         try {
@@ -149,11 +217,43 @@ public class CoffeeMachine {
 
     }
 
-    public void saveToFile(String fileName){
+    public boolean changePassword(String newPassword) {
+
+        newPassword = newPassword;
+        boolean containsDigit = false;
+        boolean containsLowercase = false;
+        boolean containsUpperCase = false;
+        for (char c : newPassword.toCharArray()) {
+            if (Character.isDigit(c)) {
+                containsDigit = true;
+                break;
+            }
+        }
+        for (char c : newPassword.toCharArray()) {
+            if (Character.isLowerCase(c)) {
+                containsLowercase = true;
+                break;
+            }
+        }
+        for (char c : newPassword.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                containsUpperCase = true;
+                break;
+            }
+        }
+        if (newPassword.length() >= 8 && containsDigit && containsUpperCase && containsLowercase) {
+            this.adminPassword = newPassword;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void saveToFile(String fileName) {
         try {
             FileWriter writer = new FileWriter(fileName);
 
-            writer.write(water + "; " +  milk + "; " + coffeeBeans + "; " + cups + "; " + money);
+            writer.write(water + "; " + milk + "; " + coffeeBeans + "; " + cups + "; " + money);
             writer.write("\n");
             writer.write(adminUsername + "; " + adminPassword);
             writer.write("\n");
@@ -165,6 +265,9 @@ public class CoffeeMachine {
         }
     }
 
+    public void saveToTransactionLog() {
+
+    }
 
     public boolean start() {
         return loadFromFile(statusFileName);
@@ -173,6 +276,7 @@ public class CoffeeMachine {
     public void stop() {
         saveToFile(statusFileName);
     }
+
 
     @Override
     public String toString() {
