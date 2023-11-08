@@ -74,22 +74,6 @@ public class CoffeeMachineConsole {
         }
     }
 
-    private boolean isStrongPassword(String password) {
-        if (password.length() < 7) {
-            return false;
-        }
-
-        boolean containsDigit = false;
-        for (char c : password.toCharArray()) {
-            if (Character.isDigit(c)) {
-                containsDigit = true;
-                break;
-            }
-        }
-
-        return containsDigit;
-    }
-
     private void adminMenu(CoffeeMachine machine, Logger logger) {
         String ch = "";
         while (!ch.equals("exit")) {
@@ -132,6 +116,7 @@ public class CoffeeMachineConsole {
 
                 case "log":
                     logger.printLog();
+
                 case "exit":
                     break;
 

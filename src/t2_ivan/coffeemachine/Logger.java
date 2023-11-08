@@ -23,4 +23,8 @@ public class Logger {
             System.out.println(log);
         }
     }
+
+    void saveLog() {
+
+    }
 }
