@@ -89,6 +89,7 @@ public class CoffeeMachine {
             System.out.println("Sorry, not enough " + missing + "\n");
             Transaction transaction = new Transaction("coffee type: " + coffeeType.getName() + ", action: not bought, not enough ingeredients: " + missing);
             logList.add(transaction);
+            CoffeeMachineConsole.addLog(transaction.getCroatianDateStr(), transaction.getWhatHappened());
         }
     }
 
