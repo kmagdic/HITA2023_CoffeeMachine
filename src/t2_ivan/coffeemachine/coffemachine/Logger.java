@@ -1,4 +1,4 @@
-package t2_ivan.coffeemachine;
+package t2_ivan.coffeemachine.coffemachine;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
