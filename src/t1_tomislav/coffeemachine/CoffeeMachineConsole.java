@@ -75,7 +75,7 @@ public class CoffeeMachineConsole {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, exit):");
+            System.out.println("Write action (fill, remaining, take, password, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -104,7 +104,15 @@ public class CoffeeMachineConsole {
                     System.out.println(machine.getCups() + " cups");
                     System.out.println("$" + machine.getMoney() + " of money");
                     break;
-
+                case "password":
+                    System.out.println("Enter new password: ");
+                    String newPassword = sc.next();
+                    if (newPassword.length() >= 7 && newPassword.matches(".*\\d.*")) {
+                        machine.changeAdminPassword(newPassword);
+                    } else {
+                        System.out.println("New password must be at least 7 characters long and contain at least one number.");
+                    }
+                    break;
                 case "exit":
                     break;
 

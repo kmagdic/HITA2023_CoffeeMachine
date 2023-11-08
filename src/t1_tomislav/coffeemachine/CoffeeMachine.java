@@ -174,6 +174,18 @@ public class CoffeeMachine {
         saveToFile(statusFileName);
     }
 
+    public boolean changeAdminPassword(String newPassword) {
+        // Provjeri je li nova lozinka ispravna (minimalno 7 znakova i sadrži barem jedan broj)
+        if (newPassword.length() >= 7 && newPassword.matches(".*\\d.*")) {
+            adminPassword = newPassword; // Postavi novu lozinku
+            System.out.println("Admin password successfully changed.");
+            return true;
+        } else {
+            System.out.println("New password must be at least 7 characters long and contain at least one number.");
+            return false;
+        }
+    }
+
     @Override
     public String toString() {
         return "CoffeeMachine{" +
