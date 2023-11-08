@@ -1,5 +1,8 @@
 package t5_fran.coffeemachine;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class CoffeeMachineConsole {
@@ -13,6 +16,7 @@ public class CoffeeMachineConsole {
     }
 
     void run() {
+
         CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
         System.out.println("Welcome to Coffee Machine 1.0 - version by Fran!");
         boolean startedSuccessfully = machine.start();
@@ -75,7 +79,7 @@ public class CoffeeMachineConsole {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, exit):");
+            System.out.println("Write action (fill, remaining, take, password, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -86,7 +90,7 @@ public class CoffeeMachineConsole {
                     int milk = sc.nextInt();
                     System.out.println("Write how many grams of coffee beans you want to add:");
                     int coffeeBeans = sc.nextInt();
-                    System.out.println("\"Write how many disposable cups you want to add: ");
+                    System.out.println("Write how many disposable cups you want to add: ");
                     int cup = sc.nextInt();
                     machine.fill(water, milk, coffeeBeans, cup);
                     break;
@@ -100,10 +104,38 @@ public class CoffeeMachineConsole {
                     System.out.println("The coffee machine has:");
                     System.out.println(machine.getWater() + " ml of water");
                     System.out.println(machine.getMilk() + " ml of milk");
-                    System.out.println(machine.getCoffeeBeans() + " g of water");
+                    System.out.println(machine.getCoffeeBeans() + " g of coffee beans");
                     System.out.println(machine.getCups() + " cups");
                     System.out.println("$" + machine.getMoney() + " of money");
                     break;
+
+                case "password":
+                    boolean pass1 = false;
+                    boolean pass2 = false;
+                    boolean ultimatePass = false;
+                    while (ultimatePass != true) {
+
+                        pass1 = false;
+                        pass2 = false;
+                        System.out.println("Enter new admin password:");
+                        String newPass = sc.next();
+                        char[] newPassArray = newPass.toCharArray();
+                        for (char letter : newPassArray) {
+                            if (Character.isDigit(letter)) {
+                                pass1 = true;
+                            }
+                        }
+                        if (newPass.length() >= 7) {
+                            pass2 = true;
+                        }
+                        if (pass1 == true && pass2) {
+                            machine.setAdminPassword(newPass);
+                            ultimatePass = true;
+                        } else {
+                            System.out.println("Please enter stronger password! It has to be a least 7 characters and it needs has at least one number.");
+                        }
+
+                    }
 
                 case "exit":
                     break;
