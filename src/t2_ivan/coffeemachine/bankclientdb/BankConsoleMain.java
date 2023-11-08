@@ -56,14 +56,49 @@ public class BankConsoleMain {
                     break;
 
                 case 2:
+                    clientList = clientRepository.clientList();
+                    for (Client c: clientList) {
+                    System.out.println(c.getFirstName() + " " + c.getLastName() + " " + c.getAddress() + " " + c.getOib());
+                    }
+                System.out.println();
 
                     break;
 
                 case 3:
+                    System.out.println("OIB: ");
+                    String oib = s.next();
+                    clientList = clientRepository.clientList();
+                    Client c = findClient(oib);
+
+                    if (c == null){
+                        System.out.println("Client doesn't exist.");
+                    }
+                    else {
+                        System.out.println("First name:");
+                        c.setFirstName(s.next());
+                        System.out.println("Last name:");
+                        c.setLastName(s.next());
+                        System.out.println("Address:");
+                        c.setAddress(s.next());
+                        System.out.println("OIB:");
+                        c.setOib(s.next());
+
+                        clientRepository.updateClient(c);
+                    }
 
                     break;
 
                 case 4:
+                    System.out.println("OIB: ");
+                    String o = s.next();
+                    Client clientToDelete = findClient(o);
+
+                    if (clientToDelete == null){
+                        System.out.println("Client doesn't exist.");
+                    }
+                    else {
+                        clientRepository.delete(clientToDelete);
+                    }
 
             }
         }
@@ -74,5 +109,14 @@ public class BankConsoleMain {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    public static Client findClient (String oib){
+        for (Client c: clientList) {
+            if (oib.equals(c.getOib())){
+                return c;
+            }
+
+        }
+        return null;
     }
 }
