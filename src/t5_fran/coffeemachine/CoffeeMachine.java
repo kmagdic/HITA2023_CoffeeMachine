@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class CoffeeMachine {
@@ -14,6 +16,7 @@ public class CoffeeMachine {
     private int cups;
     private float money;
     private CoffeeType[] coffeeTypes = new CoffeeType[3];
+    private List<Transaction> transactions = new ArrayList<>();
 
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
@@ -55,6 +58,10 @@ public class CoffeeMachine {
         return money;
     }
 
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
     public void setAdminPassword(String adminPassword) {
         this.adminPassword = adminPassword;
     }
@@ -78,9 +85,13 @@ public class CoffeeMachine {
             this.coffeeBeans -= coffeeType.getCoffeeBeansNeeded();
             this.money += coffeeType.getPrice();
             this.cups -= 1;
+
+            transactions.add(new Transaction(coffeeType.getName(), "Bought"));
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
+
+            transactions.add(new Transaction(coffeeType.getName(), "Failed purchase - missing: " + missing));
         }
     }
 
