@@ -1,5 +1,8 @@
 package t2_ivan.coffeemachine.bankclientdb;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -8,6 +11,15 @@ public class BankConsoleMain {
     static Scanner s = new Scanner(System.in);
     static List<Client> clientList = new ArrayList<>();
     public static void main(String[] args) {
+
+        Connection conn;
+
+        conn = makeDBConnection("bank.db");
+
+        ClientRepository clientRepository = new ClientRepository(conn);
+
+        clientRepository.createTable();
+
 
         Bank adiko = new Bank("Adiko", "Banfica");
         System.out.println("Bank " + adiko.getName() + " is generated\n");
@@ -28,6 +40,18 @@ public class BankConsoleMain {
             switch (choice){
 
                 case 1:
+                    Client newClient = new Client();
+
+                    System.out.println("First name:");
+                    newClient.setFirstName(s.next());
+                    System.out.println("Last name:");
+                    newClient.setLastName(s.next());
+                    System.out.println("Address:");
+                    newClient.setAddress(s.next());
+                    System.out.println("OIB:");
+                    newClient.setOib(s.next());
+
+                    clientRepository.insertClient(newClient);
 
                     break;
 
@@ -42,6 +66,13 @@ public class BankConsoleMain {
                 case 4:
 
             }
+        }
+    }
+    public static Connection makeDBConnection(String filename) {
+        try {
+            return DriverManager.getConnection("jdbc:h2:./" + filename);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
