@@ -1,5 +1,8 @@
 package t5_fran.coffeemachine;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,11 +11,20 @@ import java.util.Scanner;
 public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
-
+    static Connection conn;
 
     public static void main(String[] args)  {
         CoffeeMachineConsole console = new CoffeeMachineConsole();
         console.run();
+        makeDBConnection("./cmtransactions.h2");
+    }
+
+    public static void makeDBConnection(String fileName) {
+        try {
+            conn = DriverManager.getConnection("jdbc:h2:" + fileName);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     void run() {
@@ -139,9 +151,7 @@ public class CoffeeMachineConsole {
                     break;
 
                 case "log":
-                    for (Transaction t : machine.getTransactions()) {
-                        System.out.println(t.getTransactionInfo());
-                    }
+                    System.out.println(machine.getTransactions(conn));
                     break;
 
                 case "exit":
