@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CoffeeMachine {
@@ -13,6 +14,7 @@ public class CoffeeMachine {
     private int coffeeBeans;
     private int cups;
     private float money;
+    public ArrayList<Transaction> logList = new ArrayList<Transaction>();
     private CoffeeType[] coffeeTypes = new CoffeeType[3];
 
     private String adminUsername = "admin";
@@ -78,9 +80,14 @@ public class CoffeeMachine {
             this.coffeeBeans -= coffeeType.getCoffeeBeansNeeded();
             this.money += coffeeType.getPrice();
             this.cups -= 1;
+            Transaction transaction = new Transaction("coffee type: " + coffeeType.getName() + ", action: bought");
+            logList.add(transaction);
+
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
+            Transaction transaction = new Transaction("coffee type: " + coffeeType.getName() + ", action: not bought, not enough ingeredients: " + missing);
+            logList.add(transaction);
         }
     }
 

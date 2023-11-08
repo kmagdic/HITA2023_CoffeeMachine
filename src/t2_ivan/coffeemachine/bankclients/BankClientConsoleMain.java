@@ -1,4 +1,5 @@
-package _karlo_dragan.bankclients;
+package t2_ivan.coffeemachine.bankclients;
+
 import java.sql.*;
 
 public class BankClientConsoleMain {

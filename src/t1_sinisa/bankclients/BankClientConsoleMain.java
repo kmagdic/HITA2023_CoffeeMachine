@@ -1,4 +1,4 @@
-package _karlo_dragan.bankclients;
+package t1_sinisa.bankclients;
 import java.sql.*;
 
 public class BankClientConsoleMain {
@@ -9,7 +9,7 @@ public class BankClientConsoleMain {
     public static void main(String[] args) {
         makeDBConnection("./banksystem.h2");
         createSchema(conn);
-        addUser("Dragan", "Sačer", "dragan@agileway.com", "test123");
+        addUser("Dragan", "Sačer", "dragan@agileway.com", "dsacer", "test123");
 
     }
 
@@ -31,6 +31,7 @@ public class BankClientConsoleMain {
                         "    first_name VARCHAR(255) NOT NULL,\n" +
                         "    last_name VARCHAR(255) NOT NULL,\n" +
                         "    email VARCHAR(255) NOT NULL,\n" +
+                        "    username VARCHAR(255) NOT NULL,\n" +
                         "    password VARCHAR(255) NOT NULL\n" +
                         ");";
 
@@ -47,14 +48,15 @@ public class BankClientConsoleMain {
 
     }
 
-    public static void addUser(String firstName, String lastName, String email, String password) {
-        String sql = "INSERT INTO app_user(first_name, last_name, email, password) VALUES(?, ?, ?, ?)";
+    public static void addUser(String firstName, String lastName, String email, String username, String password) {
+        String sql = "INSERT INTO app_user(first_name, last_name, email, username, password) VALUES(?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, firstName);
             pstmt.setString(2, lastName);
             pstmt.setString(3, email);
-            pstmt.setString(4, password);
+            pstmt.setString(4, username);
+            pstmt.setString(5, password);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

@@ -13,7 +13,9 @@ public class CoffeeMachineConsole {
     }
 
     void run() {
-        CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
+        Logger logger = new Logger();
+
+        CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550, logger);
         System.out.println("Welcome to Coffee Machine 1.0 version Ivan");
         boolean startedSuccessfully = machine.start();
 
@@ -38,11 +40,12 @@ public class CoffeeMachineConsole {
                     String password = sc.next();
 
                     if (machine.login(username, password)) {
-                        adminMenu(machine);
+                        adminMenu(machine, logger);
                     } else {
                         System.out.println("Wrong username or password\n");
                     }
                     break;
+
 
                 case "exit":
                     machine.stop();
@@ -71,11 +74,11 @@ public class CoffeeMachineConsole {
         }
     }
 
-    private void adminMenu(CoffeeMachine machine) {
+    private void adminMenu(CoffeeMachine machine, Logger logger) {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, exit):");
+            System.out.println("Write action (fill, remaining, take, password, log, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -104,6 +107,15 @@ public class CoffeeMachineConsole {
                     System.out.println(machine.getCups() + " cups");
                     System.out.println("$" + machine.getMoney() + " of money");
                     break;
+
+                case "password":
+                    System.out.println("Enter the new admin password: ");
+                    String newPassword = sc.next();
+                    machine.changeAdminPassword(newPassword);
+                    break;
+
+                case "log":
+                    logger.printLog();
 
                 case "exit":
                     break;

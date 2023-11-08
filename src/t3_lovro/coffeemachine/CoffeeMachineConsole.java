@@ -5,9 +5,10 @@ import java.util.Scanner;
 public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
+    String fileName = "src/t3_lovro/coffeemachine/coffeemachine.txt";
 
+    public static void main(String[] args) {
 
-    public static void main(String[] args)  {
         CoffeeMachineConsole console = new CoffeeMachineConsole();
         console.run();
     }
@@ -15,9 +16,8 @@ public class CoffeeMachineConsole {
     void run() {
         CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
         System.out.println("Welcome to Coffee Machine 2.0 version Lovro");
-        boolean startedSuccessfully = machine.start();
-
-        if(!startedSuccessfully) {
+              boolean startedSuccessfully = machine.start();
+        if (!startedSuccessfully) {
             System.out.println("Coffee machine started but without file. Using default values.");
         }
 
@@ -45,6 +45,7 @@ public class CoffeeMachineConsole {
                     break;
 
                 case "exit":
+                    machine.saveToFile(fileName);
                     machine.stop();
                     System.out.println("Shutting down the machine. Bye!");
                     break;
@@ -75,7 +76,7 @@ public class CoffeeMachineConsole {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, exit):");
+            System.out.println("Write action (fill, remaining, take, password, log,  exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -104,14 +105,32 @@ public class CoffeeMachineConsole {
                     System.out.println(machine.getCups() + " cups");
                     System.out.println("$" + machine.getMoney() + " of money");
                     break;
-
+                case "password":
+                    boolean i = true;
+                    while (i) {
+                        System.out.println("Enter new admin password: ");
+                        Scanner s = new Scanner(System.in);
+                        String newPassword = s.next();
+                        boolean c = machine.changePassword(newPassword);
+                        if (c) {
+                            System.out.println("Password is changed ");
+                            i = false;
+                        } else {
+                            System.out.println("Please enter stronger password! It has to be at least 7 characters and it needs to have at least one number ");
+                        }
+                    }
+                    break;
+                case "log":
+                    System.out.println("Transaction log; ");
+                    machine.readingFromDB();
+                    break;
                 case "exit":
+                    machine.saveToFile(fileName);
                     break;
 
             }
         }
     }
-
 
 
 }
