@@ -34,3 +34,7 @@ bin/
 /HITA2023_CoffeeMachine.iml
 /CoffeeMachine_1.0.iml
 /HITA2023_CoffeeMachine**.iml
+/banksystem.h2.mv.db
+/banksystem.h2.trace.db
+/coffeemachine.h2.mv.db
+/coffeemachine.h2.trace.db

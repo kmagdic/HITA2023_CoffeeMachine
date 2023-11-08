@@ -6,18 +6,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 public class CoffeeMachine {
 
-    private int water;
-    private int milk;
-    private int coffeeBeans;
-    private int cups;
-    private float money;
+    protected int water;
+    protected int milk;
+    protected int coffeeBeans;
+    protected int cups;
+    protected float money;
     private ArrayList<CoffeeType> coffeeTypes = new ArrayList<>();
+    private ArrayList<String> transactionLog = new ArrayList<>();
 
-    private String adminUsername = "admin";
-    private String adminPassword = "admin12345";
-    private String statusFileName = "coffee_machine_status.txt";;
+    String adminUsername = "admin";
+    String adminPassword = "admin12345";
+    String statusFileName = "coffee_machine_status.txt";
 
     public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) {
         this.water = water;
@@ -75,9 +78,14 @@ public class CoffeeMachine {
             this.coffeeBeans -= coffeeType.getCoffeeBeansNeeded();
             this.money += coffeeType.getPrice();
             this.cups -= 1;
+
+            logTransaction(coffeeType, "Bought");
+
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
+
+            logTransaction(coffeeType, "Not bought, not enough ingredients: " + missing);
         }
     }
 
@@ -121,7 +129,8 @@ public class CoffeeMachine {
     public void changeAdminPassword(String newPassword) {
         Scanner sc = new Scanner(System.in);
         while (!isValidPassword(newPassword)) {
-            System.out.println("Please enter a stronger password! It has to be at least 7 characters and must contain at least one number.");
+            System.out.println("Please enter a stronger password! It has to be at least 7 characters and must contain " +
+                    "at least one number.");
             System.out.println("Enter new admin password:");
             newPassword = sc.next();
         }
@@ -129,64 +138,28 @@ public class CoffeeMachine {
         System.out.println("Password is changed");
     }
 
-    public boolean isValidPassword(String password) {
-        return password.length() >= 7 && password.matches(".*\\d.*");
-    }
-
-    public boolean loadFromFile(String fileName)  {
-        FileReader reader = null;
-
-        try {
-            reader = new FileReader(fileName);
-        } catch (FileNotFoundException e) {
-            return false;
+    private boolean isValidPassword(String password) {
+        int digitCount = 0;
+        for (char character : password.toCharArray()) {
+            if (Character.isDigit(character)) {
+                digitCount++;
+            }
         }
-
-        Scanner fileScanner = new Scanner(reader);
-
-        // FILE format:
-        // <water_status>; <milk_status>; <coffee_beans_status>; <cups_status>; <money_status>
-        // <admin_username>; <admin_password>
-
-        fileScanner.useDelimiter("; |\n"); // delimiter is "; " or "\n" (for the last value)
-
-        water = fileScanner.nextInt();
-        milk = fileScanner.nextInt();
-        coffeeBeans = fileScanner.nextInt();
-        cups = fileScanner.nextInt();
-        money = Float.parseFloat(fileScanner.next());
-
-        adminUsername = fileScanner.next();
-        adminPassword = (fileScanner.next()).trim();
-
-        return true;
-
-
+        return password.length() >= 7 && digitCount > 0;
     }
 
-    public void saveToFile(String fileName){
-        try {
-            FileWriter writer = new FileWriter(fileName);
+    private void logTransaction(CoffeeType coffeeType, String action) {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        String logEntry = "Date/time: " + dateFormat.format(date) + ", coffee type: " + coffeeType.getName() + ", action: "
+                + action;
+        transactionLog.add(logEntry);
+    }
 
-            writer.write(water + "; " +  milk + "; " + coffeeBeans + "; " + cups + "; " + money);
-            writer.write("\n");
-            writer.write(adminUsername + "; " + adminPassword);
-            writer.write("\n");
-
-            writer.close();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public void viewTransactionLog() {
+        for (String entry : transactionLog) {
+            System.out.println(entry);
         }
-    }
-
-
-    public boolean start() {
-        return loadFromFile(statusFileName);
-    }
-
-    public void stop() {
-        saveToFile(statusFileName);
     }
 
     @Override
@@ -199,6 +172,4 @@ public class CoffeeMachine {
                 ", money=" + money +
                 '}';
     }
-
-
 }

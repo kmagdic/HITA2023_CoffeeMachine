@@ -5,6 +5,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CoffeeMachine {
 
@@ -13,7 +16,8 @@ public class CoffeeMachine {
     private int coffeeBeans;
     private int cups;
     private float money;
-    private CoffeeType[] coffeeTypes = new CoffeeType[3];
+    private ArrayList<CoffeeType> coffeeTypes = new ArrayList<>();
+    private ArrayList<String> transactionLog = new ArrayList<>();
 
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
@@ -26,14 +30,17 @@ public class CoffeeMachine {
         this.cups = cups;
         this.money = money;
 
-        coffeeTypes[0] = new CoffeeType("Espresso", 350, 0,16,4);
-        coffeeTypes[1] = new CoffeeType("Latte",350, 75,20,7);
-        coffeeTypes[2] = new CoffeeType("Capuccino",200, 100,12,6);
+        coffeeTypes.add(new CoffeeType("Espresso", 350, 0, 16, 4));
+        coffeeTypes.add(new CoffeeType("Latte", 350, 75, 20, 7));
+        coffeeTypes.add(new CoffeeType("Cappuccino", 200, 100, 12, 6));
+
+
     }
 
-    public CoffeeType[] getCoffeeTypes() {
+    public ArrayList<CoffeeType> getCoffeeTypes() {
         return coffeeTypes;
     }
+
 
     public int getWater() {
         return water;
@@ -66,8 +73,12 @@ public class CoffeeMachine {
     }
 
     public void buyCoffee(CoffeeType coffeeType){
+        String timestamp = getCurrentTimestamp();
+        String transaction;
+
         if (hasEnoughResources(coffeeType)) {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
+            transaction = "Date/time: " + timestamp + ", coffee type: " + coffeeType.getName() + ", action: Bought";
 
             this.water -= coffeeType.getWaterNeeded();
             this.milk -= coffeeType.getMilkNeeded();
@@ -77,7 +88,9 @@ public class CoffeeMachine {
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
+            transaction = "Date/time: " + timestamp + ", coffee type: " + coffeeType.getName() + ", action: Not bought, no enough ingredients: " + calculateWhichIngredientIsMissing(coffeeType);
         }
+        transactionLog.add(transaction);
     }
 
     public float takeMoney(){
@@ -174,6 +187,25 @@ public class CoffeeMachine {
         saveToFile(statusFileName);
     }
 
+    public boolean changeAdminPassword(String newPassword) {
+        // Provjeri je li nova lozinka ispravna (minimalno 7 znakova i sadrži barem jedan broj)
+        if (newPassword.length() >= 7 && newPassword.matches(".*\\d.*")) {
+            adminPassword = newPassword; // Postavi novu lozinku
+            System.out.println("Admin password successfully changed.");
+            return true;
+        } else {
+            System.out.println("New password must be at least 7 characters long and contain at least one number.");
+            return false;
+        }
+    }
+
+    public ArrayList<String> getTransactionLog() {
+        return transactionLog;
+    }
+    private String getCurrentTimestamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        return sdf.format(new Date());
+    }
     @Override
     public String toString() {
         return "CoffeeMachine{" +

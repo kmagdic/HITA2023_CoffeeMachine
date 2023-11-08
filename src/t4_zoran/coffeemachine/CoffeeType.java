@@ -5,16 +5,16 @@ public class CoffeeType {
     private int milkNeeded;
     private int waterNeeded;
     private int coffeeBeansNeeded;
-    private int cupsNeeded;
+    private final int cupsNeeded;
     private int price;
     private String name;
 
 
-    public CoffeeType(String name, int waterNeeded, int milkNeeded, int coffeeBeansNeeded, int cupsNeeded, int price) {
+    public CoffeeType(String name, int waterNeeded, int milkNeeded, int coffeeBeansNeeded, int price) {
         this.milkNeeded = milkNeeded;
         this.waterNeeded = waterNeeded;
         this.coffeeBeansNeeded = coffeeBeansNeeded;
-        this.cupsNeeded = coffeeBeansNeeded;
+        this.cupsNeeded = 1;
         this.price = price;
         this.name = name;
     }
@@ -61,9 +61,5 @@ public class CoffeeType {
 
     public int getCupsNeeded() {
         return cupsNeeded;
-    }
-
-    public void setCupsNeeded(int cupsNeeded) {
-        this.cupsNeeded = cupsNeeded;
     }
 }

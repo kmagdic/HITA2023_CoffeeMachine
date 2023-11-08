@@ -13,18 +13,20 @@ public class CoffeeMachine {
     private int coffeeBeans;
     private int cups;
     private float money;
-    private CoffeeType[] coffeeTypes = new CoffeeType[3];
+    private final CoffeeType[] coffeeTypes = new CoffeeType[3];
 
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
-    private String statusFileName = "coffee_machine_status.txt";;
+    private final String statusFileName = "coffee_machine_status.txt";
+    private final Logger logger;
 
-    public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) {
+    public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money, Logger logger) {
         this.water = water;
         this.milk = milk;
         this.coffeeBeans = coffeeBeans;
         this.cups = cups;
         this.money = money;
+        this.logger = logger;
 
         coffeeTypes[0] = new CoffeeType("Espresso", 350, 0,16,4);
         coffeeTypes[1] = new CoffeeType("Latte",350, 75,20,7);
@@ -68,6 +70,8 @@ public class CoffeeMachine {
     public void buyCoffee(CoffeeType coffeeType){
         if (hasEnoughResources(coffeeType)) {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
+            String logText = "coffee type: " + coffeeType.getName() + " action: Bought";
+            logger.log(logText);
 
             this.water -= coffeeType.getWaterNeeded();
             this.milk -= coffeeType.getMilkNeeded();
@@ -77,6 +81,8 @@ public class CoffeeMachine {
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
+            String logText = "coffee type: " + coffeeType.getName() + " action: Not bought, not enough ingredients";
+            logger.log(logText);
         }
     }
 
@@ -101,6 +107,31 @@ public class CoffeeMachine {
             ingredientMissing = "cups" ;
         }
         return ingredientMissing;
+    }
+
+    public void changeAdminPassword(String newPassword) {
+        if (isStrongPassword(newPassword)) {
+            adminPassword = newPassword;
+            System.out.println("Admin password is changed\n");
+        } else {
+            System.out.println("Please enter a stronger password! It must be at least 7 characters and contain at least one number.\n");
+        }
+    }
+
+    private boolean isStrongPassword(String password) {
+        if (password.length() < 7) {
+            return false;
+        }
+
+        boolean containsDigit = false;
+        for (char c : password.toCharArray()) {
+            if (Character.isDigit(c)) {
+                containsDigit = true;
+                break;
+            }
+        }
+
+        return containsDigit;
     }
 
     public void fill(int water, int milk, int coffeeBeans, int cups){

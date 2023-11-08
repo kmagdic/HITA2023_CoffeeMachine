@@ -1,6 +1,7 @@
 package t1_tomislav.coffeemachine;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class CoffeeMachineConsole {
 
@@ -57,15 +58,16 @@ public class CoffeeMachineConsole {
 
     private void buyAction(CoffeeMachine machine) {
         System.out.println("Choice: ");
-        CoffeeType[] coffeeTypes = machine.getCoffeeTypes();
-        for (int i = 0; i < machine.getCoffeeTypes().length; i++) {
-            System.out.println((i + 1) + " - " + coffeeTypes[i].getName());
+        ArrayList<CoffeeType> coffeeTypes = machine.getCoffeeTypes();
+        for (int i = 0; i < coffeeTypes.size(); i++) {
+            System.out.println((i + 1) + " - " + coffeeTypes.get(i).getName());
         }
-        System.out.println("Enter your choice: ");
 
+        System.out.println("Enter your choice: ");
         int typeOfCoffeeChoice = sc.nextInt();
-        if (typeOfCoffeeChoice <= coffeeTypes.length) {
-            machine.buyCoffee(coffeeTypes[typeOfCoffeeChoice - 1]);
+
+        if (typeOfCoffeeChoice >= 1 && typeOfCoffeeChoice <= coffeeTypes.size()) {
+            machine.buyCoffee(coffeeTypes.get(typeOfCoffeeChoice - 1));
         } else {
             System.out.println("Wrong enter\n");
         }
@@ -75,7 +77,7 @@ public class CoffeeMachineConsole {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, exit):");
+            System.out.println("Write action (fill, remaining, take, password, log, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -104,7 +106,22 @@ public class CoffeeMachineConsole {
                     System.out.println(machine.getCups() + " cups");
                     System.out.println("$" + machine.getMoney() + " of money");
                     break;
-
+                case "log":
+                    System.out.println("Showing transaction log: ");
+                    ArrayList<String> transactionLog = machine.getTransactionLog();
+                    for (String transaction : transactionLog) {
+                        System.out.println(transaction);
+                    }
+                    break;
+                case "password":
+                    System.out.println("Enter new password: ");
+                    String newPassword = sc.next();
+                    if (newPassword.length() >= 7 && newPassword.matches(".*\\d.*")) {
+                        machine.changeAdminPassword(newPassword);
+                    } else {
+                        System.out.println("New password must be at least 7 characters long and contain at least one number.");
+                    }
+                    break;
                 case "exit":
                     break;
 
