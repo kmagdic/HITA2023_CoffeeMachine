@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CoffeeMachine {
 
@@ -15,6 +17,7 @@ public class CoffeeMachine {
     private int cups;
     private float money;
     private ArrayList<CoffeeType> coffeeTypes = new ArrayList<>();
+    private ArrayList<String> transactionLog = new ArrayList<>();
 
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
@@ -70,8 +73,12 @@ public class CoffeeMachine {
     }
 
     public void buyCoffee(CoffeeType coffeeType){
+        String timestamp = getCurrentTimestamp();
+        String transaction;
+
         if (hasEnoughResources(coffeeType)) {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
+            transaction = "Date/time: " + timestamp + ", coffee type: " + coffeeType.getName() + ", action: Bought";
 
             this.water -= coffeeType.getWaterNeeded();
             this.milk -= coffeeType.getMilkNeeded();
@@ -81,7 +88,9 @@ public class CoffeeMachine {
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
+            transaction = "Date/time: " + timestamp + ", coffee type: " + coffeeType.getName() + ", action: Not bought, no enough ingredients: " + calculateWhichIngredientIsMissing(coffeeType);
         }
+        transactionLog.add(transaction);
     }
 
     public float takeMoney(){
@@ -190,6 +199,13 @@ public class CoffeeMachine {
         }
     }
 
+    public ArrayList<String> getTransactionLog() {
+        return transactionLog;
+    }
+    private String getCurrentTimestamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        return sdf.format(new Date());
+    }
     @Override
     public String toString() {
         return "CoffeeMachine{" +
