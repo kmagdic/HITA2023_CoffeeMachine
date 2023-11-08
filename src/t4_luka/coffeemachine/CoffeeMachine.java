@@ -82,6 +82,7 @@ public class CoffeeMachine {
             this.cups -= 1;
             Transaction transaction = new Transaction("coffee type: " + coffeeType.getName() + ", action: bought");
             logList.add(transaction);
+            CoffeeMachineConsole.addLog(transaction.getCroatianDateStr(), transaction.getWhatHappened());
 
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
