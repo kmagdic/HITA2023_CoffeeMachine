@@ -171,8 +171,8 @@ public class CoffeeMachineConsole {
                     break;
 
                 case "log":
-                    for (Transaction t: machine.logList)
-                    System.out.println(t.getCroatianDateStr() + " "+  t.getWhatHappened());
+                    //for (Transaction t: machine.logList)
+                    //System.out.println(t.getCroatianDateStr() + " "+  t.getWhatHappened());
                     String query = "SELECT * FROM Log";
 
                     try (PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -182,9 +182,9 @@ public class CoffeeMachineConsole {
                         // Process the result set
                         while (resultSet.next()) {
                             // Retrieve data from the result set
-                            int id = resultSet.getInt("id");  // Assuming 'id' is a column in your 'Log' table
-                            String date = resultSet.getString("date");
-                            String message = resultSet.getString("message"); // Assuming 'message' is a column in your 'Log' table
+                            int id = resultSet.getInt("ID");  // Assuming 'id' is a column in your 'Log' table
+                            String date = resultSet.getString("Date");
+                            String message = resultSet.getString("Message"); // Assuming 'message' is a column in your 'Log' table
 
                             // Do something with the retrieved data
                             System.out.println("ID: " + id + "Date: " + date + ", Message: " + message);
