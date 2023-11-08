@@ -7,6 +7,7 @@ public class CoffeeMachineConsole {
     private static Connection conn;
 
     Scanner sc = new Scanner(System.in);
+
     private static void makeDBConnection(String fileName) {
         try {
             conn = DriverManager.getConnection("jdbc:h2:" + fileName);
@@ -48,9 +49,11 @@ public class CoffeeMachineConsole {
 
     public static void main(String[] args)  {
         CoffeeMachineConsole console = new CoffeeMachineConsole();
-        console.run();
+
         makeDBConnection("./banksystem.h2");
         createSchema(conn);
+
+        console.run();
     }
 
     void run() {
