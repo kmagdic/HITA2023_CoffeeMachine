@@ -14,7 +14,7 @@ public class BankConsoleMain {
 
         Connection conn;
 
-        conn = makeDBConnection("bank.db");
+        conn = makeDBConnection("ivan_bank");
 
         ClientRepository clientRepository = new ClientRepository(conn);
 
@@ -103,6 +103,7 @@ public class BankConsoleMain {
             }
         }
     }
+
     public static Connection makeDBConnection(String filename) {
         try {
             return DriverManager.getConnection("jdbc:h2:./" + filename);
