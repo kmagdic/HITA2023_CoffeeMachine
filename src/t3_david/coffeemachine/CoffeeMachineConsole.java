@@ -1,13 +1,14 @@
 package t3_david.coffeemachine;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
+    String fileName = "src/t3_david/coffeemachine/coffee_machine_status.txt";
 
-
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         CoffeeMachineConsole console = new CoffeeMachineConsole();
         console.run();
     }
@@ -17,7 +18,7 @@ public class CoffeeMachineConsole {
         System.out.println("Welcome to Coffee Machine 1.0 by David Vesligaj");
         boolean startedSuccessfully = machine.start();
 
-        if(!startedSuccessfully) {
+        if (!startedSuccessfully) {
             System.out.println("Coffee machine started but without file. Using default values.");
         }
 
@@ -45,6 +46,7 @@ public class CoffeeMachineConsole {
                     break;
 
                 case "exit":
+                    machine.saveToFile(fileName);
                     machine.stop();
                     System.out.println("Shutting down the machine. Bye!");
                     break;
@@ -75,7 +77,7 @@ public class CoffeeMachineConsole {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, exit):");
+            System.out.println("Write action (fill, remaining, take, password, log, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -105,13 +107,33 @@ public class CoffeeMachineConsole {
                     System.out.println("$" + machine.getMoney() + " of money");
                     break;
 
+                case "password":
+                    System.out.println("Enter new admin password: ");
+                    String newPassword = sc.next();
+                    if (isStrongPassword(newPassword)) {
+                        machine.changedAdminPassword(newPassword);
+                        System.out.println("Password is changed\n");
+                    } else {
+                        System.out.println("Please enter a stronger password!It has to be at least 7 characters and must have at least one number.\n");
+                    }
+                    break;
+
+
+
                 case "exit":
+                    machine.saveToFile(fileName);
                     break;
 
             }
         }
     }
 
+    private boolean isStrongPassword(String password) {
+        // Password should be at least 7 characters and contain at least one number
+        return password.length() >= 7 && password.matches(".*\\d.*");
+    }
 
 
-}
+            }
+
+
