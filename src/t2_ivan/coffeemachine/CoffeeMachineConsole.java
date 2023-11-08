@@ -24,7 +24,7 @@ public class CoffeeMachineConsole {
         String action = "";
 
         while (!action.equals("exit")) {
-            System.out.println("Write action (buy, login, exit): ");
+            System.out.println("Write action (buy, login, password, exit): ");
             action = sc.next();
             switch (action) {
                 case "buy":
@@ -42,6 +42,10 @@ public class CoffeeMachineConsole {
                     } else {
                         System.out.println("Wrong username or password\n");
                     }
+                    break;
+
+                case "password":
+                    changeAdminPassword(machine);
                     break;
 
                 case "exit":
@@ -69,6 +73,34 @@ public class CoffeeMachineConsole {
         } else {
             System.out.println("Wrong enter\n");
         }
+    }
+
+    private void changeAdminPassword(CoffeeMachine machine) {
+        System.out.println("Enter new admin password: ");
+        String newPassword = sc.next();
+
+        if (isStrongPassword(newPassword)) {
+            machine.changeAdminPassword(newPassword);
+            System.out.println("Password is changed\n");
+        } else {
+            System.out.println("Please enter a stronger password! It must be at least 7 characters and contain at least one number.\n");
+        }
+    }
+
+    private boolean isStrongPassword(String password) {
+        if (password.length() < 7) {
+            return false;
+        }
+
+        boolean containsDigit = false;
+        for (char c : password.toCharArray()) {
+            if (Character.isDigit(c)) {
+                containsDigit = true;
+                break;
+            }
+        }
+
+        return containsDigit;
     }
 
     private void adminMenu(CoffeeMachine machine) {
@@ -103,6 +135,12 @@ public class CoffeeMachineConsole {
                     System.out.println(machine.getCoffeeBeans() + " g of water");
                     System.out.println(machine.getCups() + " cups");
                     System.out.println("$" + machine.getMoney() + " of money");
+                    break;
+
+                case "password":
+                    System.out.println("Enter the new admin password: ");
+                    String newPassword = sc.next();
+                    machine.changeAdminPassword(newPassword);
                     break;
 
                 case "exit":

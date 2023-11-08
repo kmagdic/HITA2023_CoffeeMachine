@@ -103,6 +103,31 @@ public class CoffeeMachine {
         return ingredientMissing;
     }
 
+    public void changeAdminPassword(String newPassword) {
+        if (isStrongPassword(newPassword)) {
+            adminPassword = newPassword;
+            System.out.println("Admin password is changed\n");
+        } else {
+            System.out.println("Please enter a stronger password! It must be at least 7 characters and contain at least one number.\n");
+        }
+    }
+
+    private boolean isStrongPassword(String password) {
+        if (password.length() < 7) {
+            return false;
+        }
+
+        boolean containsDigit = false;
+        for (char c : password.toCharArray()) {
+            if (Character.isDigit(c)) {
+                containsDigit = true;
+                break;
+            }
+        }
+
+        return containsDigit;
+    }
+
     public void fill(int water, int milk, int coffeeBeans, int cups){
         this.water += water;
         this.milk += milk;
