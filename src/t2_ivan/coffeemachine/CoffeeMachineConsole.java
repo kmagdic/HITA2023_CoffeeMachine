@@ -24,7 +24,7 @@ public class CoffeeMachineConsole {
         String action = "";
 
         while (!action.equals("exit")) {
-            System.out.println("Write action (buy, login, password, exit): ");
+            System.out.println("Write action (buy, login, exit): ");
             action = sc.next();
             switch (action) {
                 case "buy":
@@ -44,9 +44,6 @@ public class CoffeeMachineConsole {
                     }
                     break;
 
-                case "password":
-                    changeAdminPassword(machine);
-                    break;
 
                 case "exit":
                     machine.stop();
@@ -107,7 +104,7 @@ public class CoffeeMachineConsole {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, exit):");
+            System.out.println("Write action (fill, remaining, take, password, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -142,6 +139,8 @@ public class CoffeeMachineConsole {
                     String newPassword = sc.next();
                     machine.changeAdminPassword(newPassword);
                     break;
+
+                case "log":
 
                 case "exit":
                     break;
