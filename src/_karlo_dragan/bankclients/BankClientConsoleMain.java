@@ -2,8 +2,6 @@ package _karlo_dragan.bankclients;
 import java.sql.*;
 
 public class BankClientConsoleMain {
-
-
     private static Connection conn;
 
     public static void main(String[] args) {
@@ -13,15 +11,14 @@ public class BankClientConsoleMain {
 
     }
 
-
     private static void makeDBConnection(String fileName) {
+
         try {
             conn = DriverManager.getConnection("jdbc:h2:" + fileName);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     public static void createSchema(Connection conn) {
 
@@ -34,7 +31,6 @@ public class BankClientConsoleMain {
                         "    password VARCHAR(255) NOT NULL\n" +
                         ");";
 
-
         try {
 
             Statement stmt = conn.createStatement();
@@ -44,7 +40,6 @@ public class BankClientConsoleMain {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
     }
 
     public static void addUser(String firstName, String lastName, String email, String password) {
@@ -60,5 +55,4 @@ public class BankClientConsoleMain {
             System.out.println(e.getMessage());
         }
     }
-
 }
