@@ -1,14 +1,58 @@
 package t4_luka.coffeemachine;
 
+import java.sql.*;
 import java.util.Scanner;
 
 public class CoffeeMachineConsole {
+    private static Connection conn;
 
     Scanner sc = new Scanner(System.in);
 
+    private static void makeDBConnection(String fileName) {
+        try {
+            conn = DriverManager.getConnection("jdbc:h2:" + fileName);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void createSchema(Connection conn) {
+
+        String createTableSql =
+                "CREATE TABLE IF NOT EXISTS Log (\n" +
+                        "    ID INT AUTO_INCREMENT PRIMARY KEY,\n" +
+                        "    Date VARCHAR(255) NOT NULL,\n" +
+                        "    Message VARCHAR(255) NOT NULL\n);";
+
+
+        try {
+
+            Statement stmt = conn.createStatement();
+
+            // create a new table if it doesn't exist
+            stmt.execute(createTableSql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+    public static void addLog(String date, String message) {
+        String sql = "INSERT INTO Log(Date, Message) VALUES(?, ?)";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, date);
+            pstmt.setString(2, message);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     public static void main(String[] args)  {
         CoffeeMachineConsole console = new CoffeeMachineConsole();
+
+        makeDBConnection("./banksystem.h2");
+        createSchema(conn);
+
         console.run();
     }
 
@@ -75,7 +119,7 @@ public class CoffeeMachineConsole {
         String ch = "";
         while (!ch.equals("exit")) {
             System.out.println(" ");
-            System.out.println("Write action (fill, remaining, take, password, exit):");
+            System.out.println("Write action (fill, remaining, take, password, log, exit):");
             ch = sc.next();
 
             switch (ch) {
@@ -124,6 +168,30 @@ public class CoffeeMachineConsole {
                     machine.setAdminPassword(newPassword);
                     machine.saveToFile("coffee_machine_status.txt");
                     System.out.println("Password is changed");
+                    break;
+
+                case "log":
+                    //for (Transaction t: machine.logList)
+                    //System.out.println(t.getCroatianDateStr() + " "+  t.getWhatHappened());
+                    String query = "SELECT * FROM Log";
+
+                    try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                        // Execute the SELECT query
+                        ResultSet resultSet = pstmt.executeQuery();
+
+                        // Process the result set
+                        while (resultSet.next()) {
+                            // Retrieve data from the result set
+                            int id = resultSet.getInt("ID");  // Assuming 'id' is a column in your 'Log' table
+                            String date = resultSet.getString("Date");
+                            String message = resultSet.getString("Message"); // Assuming 'message' is a column in your 'Log' table
+
+                            // Do something with the retrieved data
+                            System.out.println("ID: " + id + "Date: " + date + ", Message: " + message);
+                        }
+                    } catch (SQLException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
 
                 case "exit":
