@@ -8,10 +8,9 @@ public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
     static List<CoffeeType> coffeeType = new ArrayList<>();
-
     String fileName = "src/t3_lovro/coffeemachine/coffeemachine.txt";
     static String dBPath = "./coffeemachine.h2";
-    DataBase dataBase = new DataBase(dBPath);
+    ComWithDB comWithDB = new ComWithDB(dBPath);
     public static void main(String[] args) {
 
         CoffeeMachineConsole console = new CoffeeMachineConsole();
@@ -20,8 +19,8 @@ public class CoffeeMachineConsole {
     }
 
     void run() {
-        dataBase.createSchema();
-        coffeeType = dataBase.coffeeType();
+        comWithDB.createSchema();
+        coffeeType = comWithDB.coffeeType();
         CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
         System.out.println("Welcome to Coffee Machine 2.0 version Lovro");
                 boolean startedSuccessfully = machine.start();
@@ -67,7 +66,7 @@ public class CoffeeMachineConsole {
 
                 if (3 <= coffeeType.size()) {
             System.out.println("Choice: ");
-            coffeeType = dataBase.coffeeType();
+            coffeeType = comWithDB.coffeeType();
             for (CoffeeType c : coffeeType) {
                 System.out.println(c.getId() + ". " + c.getName() + " " + c.getPrice());
 
@@ -79,7 +78,7 @@ public class CoffeeMachineConsole {
             int typeOfCoffeeChoice = sc.nextInt();
             if (typeOfCoffeeChoice <= coffeeType.size() - 1) {
                 String c = machine.buyCoffee(coffeeType.get(typeOfCoffeeChoice));
-                dataBase.addTransactionToLog(coffeeType.get(typeOfCoffeeChoice), c);
+                comWithDB.addTransactionToLog(coffeeType.get(typeOfCoffeeChoice), c);
             } else {
                 System.out.println("Wrong enter\n");
 
@@ -96,7 +95,7 @@ public class CoffeeMachineConsole {
             if (typeOfCoffeeChoice <= coffeeTypes.length) {
                 machine.buyCoffee(coffeeTypes[typeOfCoffeeChoice - 1]);
                 String c = machine.buyCoffee(coffeeTypes[typeOfCoffeeChoice - 1]);
-                dataBase.addTransactionToLog((coffeeTypes[typeOfCoffeeChoice - 1]), c);
+                comWithDB.addTransactionToLog((coffeeTypes[typeOfCoffeeChoice - 1]), c);
             } else {
                 System.out.println("Wrong enter\n");
             }
@@ -153,7 +152,7 @@ public class CoffeeMachineConsole {
                     break;
                 case "log":
                     System.out.println("Transaction log; ");
-                    dataBase.readingFromDB();
+                    comWithDB.readingFromDB();
                     break;
                 case "addCoffeeType":
                     System.out.println("Write name of new Coffee Type");
@@ -167,7 +166,7 @@ public class CoffeeMachineConsole {
                     System.out.println("What ll be the price for new coffee type ? ");
                     int newPrice = sc.nextInt();
                     CoffeeType newCoffeeType = new CoffeeType(name, newMilk, newWater, newCoffee, newPrice);
-                    dataBase.addCoffeeTypesToDB(newCoffeeType);
+                    comWithDB.addCoffeeTypesToDB(newCoffeeType);
                     break;
                 case "exit":
                     machine.saveToFile(fileName);

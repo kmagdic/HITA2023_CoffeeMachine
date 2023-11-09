@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DataBase {
+public class ComWithDB {
     Connection conn;
 
-    public DataBase(String dBPath) {
+    public ComWithDB(String dBPath) {
         this.conn = conn;
         conn = makeDBConnection(dBPath);
     }
