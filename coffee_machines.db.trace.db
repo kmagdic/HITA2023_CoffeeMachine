@@ -1,0 +1,185 @@
+2023-11-09 15:13:11.636424+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS transaction (\000aIDTransaction integer PRIMARY KEY auto_increment, \000acoffee_type text NOT NULL, \000atimestamp datetime NOT NULL, \000amissing_ingredient text NOT NULL, \000a[*]"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS transaction (
+IDTransaction integer PRIMARY KEY auto_increment, 
+coffee_type text NOT NULL, 
+timestamp datetime NOT NULL, 
+missing_ingredient text NOT NULL, 
+ [42001-224]
+2023-11-09 15:14:50.769050+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS transaction (\000aIDTransaction integer PRIMARY KEY auto_increment, \000acoffee_type text NOT NULL, \000atime_stamp datetime NOT NULL, \000amissing_ingredient text NOT NULL, \000a[*]"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS transaction (
+IDTransaction integer PRIMARY KEY auto_increment, 
+coffee_type text NOT NULL, 
+time_stamp datetime NOT NULL, 
+missing_ingredient text NOT NULL, 
+ [42001-224]
+2023-11-09 15:18:38.512238+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS transaction (\000aIDTransaction integer PRIMARY KEY auto_increment, \000acoffee_type text NOT NULL, \000atime_stamp datetime NOT NULL, \000amissing_ingredient text NOT NULL, \000a[*])"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS transaction (
+IDTransaction integer PRIMARY KEY auto_increment, 
+coffee_type text NOT NULL, 
+time_stamp datetime NOT NULL, 
+missing_ingredient text NOT NULL, 
+) [42001-224]
+2023-11-09 15:20:00.566661+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLIENT" not found; SQL statement:
+INSERT INTO client (timestamp, coffee_Type, missing_ingredient) VALUES (?,?,?) [42102-224]
+2023-11-09 15:20:57.384906+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "TIMESTAMP" not found; SQL statement:
+INSERT INTO transaction (timestamp, coffee_Type, missing_ingredient) VALUES (?,?,?) [42122-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.table.Table.getColumn(Table.java:759)
+	at org.h2.command.Parser.parseColumn(Parser.java:1190)
+	at org.h2.command.Parser.parseColumnList(Parser.java:1175)
+	at org.h2.command.Parser.parseInsert(Parser.java:1549)
+	at org.h2.command.Parser.parsePrepared(Parser.java:719)
+	at org.h2.command.Parser.parse(Parser.java:592)
+	at org.h2.command.Parser.parse(Parser.java:564)
+	at org.h2.command.Parser.prepareCommand(Parser.java:483)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:639)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:559)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1166)
+	at org.h2.jdbc.JdbcPreparedStatement.<init>(JdbcPreparedStatement.java:93)
+	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:316)
+	at t4_zoran.coffeemachine.DatabaseManager.insertTransaction(DatabaseManager.java:34)
+	at t4_zoran.coffeemachine.CoffeeMachine.buyCoffee(CoffeeMachine.java:127)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.buyAction(CoffeeMachineConsole.java:77)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.start(CoffeeMachineConsole.java:40)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.main(CoffeeMachineConsole.java:21)
+2023-11-09 15:21:27.921186+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "TIMESTAMP" not found; SQL statement:
+INSERT INTO transaction (timestamp, coffee_Type, missing_ingredient) VALUES (?,?,?) [42122-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.table.Table.getColumn(Table.java:759)
+	at org.h2.command.Parser.parseColumn(Parser.java:1190)
+	at org.h2.command.Parser.parseColumnList(Parser.java:1175)
+	at org.h2.command.Parser.parseInsert(Parser.java:1549)
+	at org.h2.command.Parser.parsePrepared(Parser.java:719)
+	at org.h2.command.Parser.parse(Parser.java:592)
+	at org.h2.command.Parser.parse(Parser.java:564)
+	at org.h2.command.Parser.prepareCommand(Parser.java:483)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:639)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:559)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1166)
+	at org.h2.jdbc.JdbcPreparedStatement.<init>(JdbcPreparedStatement.java:93)
+	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:316)
+	at t4_zoran.coffeemachine.DatabaseManager.insertTransaction(DatabaseManager.java:34)
+	at t4_zoran.coffeemachine.CoffeeMachine.buyCoffee(CoffeeMachine.java:127)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.buyAction(CoffeeMachineConsole.java:77)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.start(CoffeeMachineConsole.java:40)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.main(CoffeeMachineConsole.java:21)
+2023-11-09 15:22:20.133418+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Cannot parse "TIMESTAMP" constant "09.11.2023. 15:22:20"; SQL statement:
+INSERT INTO transaction (time_stamp, coffee_Type, missing_ingredient) VALUES (?,?,?) [22007-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:518)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.value.ValueTimestamp.parse(ValueTimestamp.java:88)
+	at org.h2.value.Value.convertToTimestamp(Value.java:2001)
+	at org.h2.value.Value.convertTo(Value.java:1174)
+	at org.h2.value.Value.convertForAssignTo(Value.java:1113)
+	at org.h2.table.Column.validateConvertUpdateSequence(Column.java:369)
+	at org.h2.table.Table.convertInsertRow(Table.java:936)
+	at org.h2.command.dml.Insert.insertRows(Insert.java:167)
+	at org.h2.command.dml.Insert.update(Insert.java:135)
+	at org.h2.command.dml.DataChangeStatement.update(DataChangeStatement.java:74)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:169)
+	at org.h2.command.Command.executeUpdate(Command.java:256)
+	at org.h2.jdbc.JdbcPreparedStatement.executeUpdateInternal(JdbcPreparedStatement.java:216)
+	at org.h2.jdbc.JdbcPreparedStatement.executeUpdate(JdbcPreparedStatement.java:174)
+	at t4_zoran.coffeemachine.DatabaseManager.insertTransaction(DatabaseManager.java:40)
+	at t4_zoran.coffeemachine.CoffeeMachine.buyCoffee(CoffeeMachine.java:127)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.buyAction(CoffeeMachineConsole.java:77)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.start(CoffeeMachineConsole.java:40)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.main(CoffeeMachineConsole.java:21)
+Caused by: java.lang.NumberFormatException: For input string: "09.11.2"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)
+	at java.base/java.lang.Integer.parseInt(Integer.java:668)
+	at java.base/java.lang.Integer.parseInt(Integer.java:786)
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:190)
+	at org.h2.util.DateTimeUtils.parseTimestamp(DateTimeUtils.java:338)
+	at org.h2.value.ValueTimestamp.parse(ValueTimestamp.java:86)
+	... 17 more
+2023-11-09 15:56:26.589319+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Cannot parse "TIMESTAMP" constant "Latte"; SQL statement:
+INSERT INTO transaction (time_stamp, coffee_Type, missing_ingredient) VALUES (?,?,?) [22007-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:518)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.value.ValueTimestamp.parse(ValueTimestamp.java:88)
+	at org.h2.value.Value.convertToTimestamp(Value.java:2001)
+	at org.h2.value.Value.convertTo(Value.java:1174)
+	at org.h2.value.Value.convertForAssignTo(Value.java:1113)
+	at org.h2.table.Column.validateConvertUpdateSequence(Column.java:369)
+	at org.h2.table.Table.convertInsertRow(Table.java:936)
+	at org.h2.command.dml.Insert.insertRows(Insert.java:167)
+	at org.h2.command.dml.Insert.update(Insert.java:135)
+	at org.h2.command.dml.DataChangeStatement.update(DataChangeStatement.java:74)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:169)
+	at org.h2.command.Command.executeUpdate(Command.java:256)
+	at org.h2.jdbc.JdbcPreparedStatement.executeUpdateInternal(JdbcPreparedStatement.java:216)
+	at org.h2.jdbc.JdbcPreparedStatement.executeUpdate(JdbcPreparedStatement.java:174)
+	at t4_zoran.coffeemachine.DatabaseManager.insertTransaction(DatabaseManager.java:40)
+	at t4_zoran.coffeemachine.CoffeeMachine.buyCoffee(CoffeeMachine.java:127)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.buyAction(CoffeeMachineConsole.java:77)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.start(CoffeeMachineConsole.java:40)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.main(CoffeeMachineConsole.java:21)
+Caused by: java.lang.IllegalArgumentException: Latte
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:187)
+	at org.h2.util.DateTimeUtils.parseTimestamp(DateTimeUtils.java:338)
+	at org.h2.value.ValueTimestamp.parse(ValueTimestamp.java:86)
+	... 17 more
+2023-11-09 16:05:16.443749+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Cannot parse "TIMESTAMP" constant "null"; SQL statement:
+INSERT INTO transaction (time_stamp, coffee_Type, missing_ingredient) VALUES (?,?,?) [22007-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:518)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.value.ValueTimestamp.parse(ValueTimestamp.java:88)
+	at org.h2.value.Value.convertToTimestamp(Value.java:2001)
+	at org.h2.value.Value.convertTo(Value.java:1174)
+	at org.h2.value.Value.convertForAssignTo(Value.java:1113)
+	at org.h2.table.Column.validateConvertUpdateSequence(Column.java:369)
+	at org.h2.table.Table.convertInsertRow(Table.java:936)
+	at org.h2.command.dml.Insert.insertRows(Insert.java:167)
+	at org.h2.command.dml.Insert.update(Insert.java:135)
+	at org.h2.command.dml.DataChangeStatement.update(DataChangeStatement.java:74)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:169)
+	at org.h2.command.Command.executeUpdate(Command.java:256)
+	at org.h2.jdbc.JdbcPreparedStatement.executeUpdateInternal(JdbcPreparedStatement.java:216)
+	at org.h2.jdbc.JdbcPreparedStatement.executeUpdate(JdbcPreparedStatement.java:174)
+	at t4_zoran.coffeemachine.DatabaseManager.insertTransaction(DatabaseManager.java:40)
+	at t4_zoran.coffeemachine.CoffeeMachine.buyCoffee(CoffeeMachine.java:127)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.buyAction(CoffeeMachineConsole.java:77)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.start(CoffeeMachineConsole.java:40)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.main(CoffeeMachineConsole.java:21)
+Caused by: java.lang.IllegalArgumentException: null
+	at org.h2.util.DateTimeUtils.parseDateValue(DateTimeUtils.java:187)
+	at org.h2.util.DateTimeUtils.parseTimestamp(DateTimeUtils.java:338)
+	at org.h2.value.ValueTimestamp.parse(ValueTimestamp.java:86)
+	... 17 more
+2023-11-09 16:27:36.285243+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TRANSACTION" not found (this database is empty); SQL statement:
+INSERT INTO transaction (time_stamp, coffee_Type, missing_ingredient) VALUES (?,?,?) [42104-224]
+2023-11-09 17:48:27.232475+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "id" not found [42122-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.jdbc.JdbcResultSet.getColumnIndex(JdbcResultSet.java:3492)
+	at org.h2.jdbc.JdbcResultSet.getInt(JdbcResultSet.java:337)
+	at t4_zoran.coffeemachine.DatabaseManager.transactionList(DatabaseManager.java:64)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.adminMenu(CoffeeMachineConsole.java:136)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.start(CoffeeMachineConsole.java:50)
+	at t4_zoran.coffeemachine.CoffeeMachineConsole.main(CoffeeMachineConsole.java:21)
+2023-11-09 18:20:45.922775+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "delete [*]* from transaction"; expected "identifier"; SQL statement:
+delete * from transaction [42001-224]
