@@ -4,12 +4,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.*;
 import java.util.Scanner;
 
-public class CoffeeMachineWithStatusInFile extends CoffeeMachine{
+class CoffeeMachineWithStatusInFile extends CoffeeMachine{
 
-    public CoffeeMachineWithStatusInFile(int water, int milk, int coffeeBeans, int cups, float money) throws IOException {
-        super(water, milk, coffeeBeans, cups, money);
+    public CoffeeMachineWithStatusInFile(int water, int milk, int coffeeBeans, int cups, float money, Connection conn) {
+        super(water, milk, coffeeBeans, cups, money, conn);
     }
 
     public boolean loadFromFile(String fileName)  {
@@ -29,14 +30,14 @@ public class CoffeeMachineWithStatusInFile extends CoffeeMachine{
 
         fileScanner.useDelimiter("; |\n"); // delimiter is "; " or "\n" (for the last value)
 
-        super.setWater(fileScanner.nextInt());
-        super.setMilk(fileScanner.nextInt());
-        super.setCoffeeBeans(fileScanner.nextInt());
-        super.setCups(fileScanner.nextInt());
-        super.setMoney(Float.parseFloat(fileScanner.next()));
+        setWater(fileScanner.nextInt());
+        setMilk(fileScanner.nextInt());
+        setCoffeeBeans(fileScanner.nextInt());
+        setCups(fileScanner.nextInt());
+        setMoney(Float.parseFloat(fileScanner.next()));
 
-        super.setAdminUsername(fileScanner.next());
-        super.setAdminPassword(fileScanner.next());
+        setAdminUsername(fileScanner.next());
+        setAdminPassword(fileScanner.next());
 
         return true;
     }
@@ -45,49 +46,16 @@ public class CoffeeMachineWithStatusInFile extends CoffeeMachine{
         try {
             FileWriter writer = new FileWriter(fileName);
 
-            writer.write(super.getWater() + "; " +  super.getMilk() + "; " + super.getCoffeeBeans() +
-                    "; " + super.getCups() + "; " + super.getMoney());
+            writer.write(getWater() + "; " +  getMilk() + "; " + getCoffeeBeans() +
+                    "; " + getCups() + "; " + getMoney());
             writer.write("\n");
-            writer.write(super.getAdminUsername() + "; " + super.getAdminPassword());
+            writer.write(getAdminUsername() + "; " + getAdminPassword());
             writer.write("\n");
 
             writer.close();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    public boolean passwordIsStrong(String newPassword){
-
-        boolean containsDigit = false;
-
-        for (char c : newPassword.toCharArray()) {
-            if (Character.isDigit(c)) {
-                containsDigit = true;
-                break;
-            }
-        }
-
-        if (newPassword.length() > 6 && containsDigit) {
-            super.setAdminPassword(newPassword);
-            return true;
-        } else
-            return false;
-    }
-
-    public void showLog() {
-
-        // Path to the log file
-        String logFilePath = "src/t4_zoran/coffeemachine/log.txt";
-
-        try (FileReader fileReader = new FileReader(logFilePath)) {
-            int character;
-            while ((character = fileReader.read()) != -1) {
-                System.out.print((char) character);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

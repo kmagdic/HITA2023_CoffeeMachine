@@ -1,25 +1,29 @@
 package t4_zoran.coffeemachine;
 
-import java.io.*;
-import java.util.Scanner;
+import java.sql.*;
+import java.util.*;
 
 public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
-    String coffeeMachineStatusFileName = "src/t4_zoran/coffeemachine/data/coffee_machine_status.txt";
+    String coffeeMachineStatusFileName = "src/t4_zoran/coffeemachine/coffee_machine_status.txt";
+    static Connection conn;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args)  {
 
-        // Configure Logback to use the "logback.xml" file in the project's root directory
-        System.setProperty("logback.configurationFile", "src/t4_zoran/coffeemachine/data/logback.xml");
+        conn = makeDBConnection("coffee_machines.db");
+
+        DatabaseManager dbm = new DatabaseManager(conn);
+
+        dbm.createDatabase();
 
         CoffeeMachineConsole console = new CoffeeMachineConsole();
-        console.start();
+        console.start(conn);
     }
 
-    void start() throws IOException {
-        CoffeeMachineWithStatusInFile machine = new CoffeeMachineWithStatusInFile(400, 540, 120, 9, 550);
-        System.out.println("Welcome to Coffee Machine 2.1.1 version by Zoran");
+    void start(Connection conn) {
+        CoffeeMachineWithStatusInFile machine = new CoffeeMachineWithStatusInFile(400, 540, 120, 9, 550, conn);
+        System.out.println("Welcome to Coffee Machine 2.3 version by Zoran");
 
         boolean loadedSuccessfully  = machine.loadFromFile(coffeeMachineStatusFileName);
         if(!loadedSuccessfully) {
@@ -32,23 +36,30 @@ public class CoffeeMachineConsole {
             System.out.println("Write action (buy, login, exit): ");
             action = sc.next();
             switch (action) {
-                case "buy" -> buyAction(machine);
-                case "login" -> {
+                case "buy":
+                    buyAction(machine);
+                    break;
+
+                case "login":
                     System.out.println("Enter username: ");
                     String username = sc.next();
                     System.out.println("Enter password: ");
                     String password = sc.next();
+
                     if (machine.login(username, password)) {
                         adminMenu(machine);
                     } else {
                         System.out.println("Wrong username or password\n");
                     }
-                }
-                case "exit" -> {
+                    break;
+
+                case "exit":
                     machine.saveToFile(coffeeMachineStatusFileName);
                     System.out.println("Shutting down the machine. Bye!");
-                }
-                default -> System.out.println("No such option");
+                    break;
+
+                default:
+                    System.out.println("No such option");
             }
         }
     }
@@ -91,7 +102,7 @@ public class CoffeeMachineConsole {
 
                 case "take":
                     float amount = machine.takeMoney();
-                    System.out.println("I gave you $" + amount);
+                    System.out.println("I gave you $" + amount + "\n");
                     break;
 
                 case "remaining":
@@ -119,11 +130,20 @@ public class CoffeeMachineConsole {
                                     "It has to be a least 7 characters and it needs has at least one number.");
                         }
                     }
-                    break;
 
                 case "log":
-                    System.out.println("Transaction log:");
-                    machine.showLog();
+                    DatabaseManager dbm = new DatabaseManager(conn);
+                    List<Transaction> transactionList = dbm.transactionList();
+                    for (Transaction t : transactionList) {
+                        System.out.print("Date/time: " + t.getTimestamp() + ", coffee type: " +
+                                t.getCoffeeType() + ", action: ");
+                        if (t.getMissing() == null) {
+                            System.out.println("Bought");
+                        } else {
+                            System.out.println("Not bought, not enough ingredients: " + t.getMissing());
+                        }
+                    }
+                    System.out.println();
                     break;
 
                 case "exit":
@@ -131,4 +151,13 @@ public class CoffeeMachineConsole {
             }
         }
     }
+
+    public static Connection makeDBConnection(String filename){
+        try {
+            return DriverManager.getConnection("jdbc:h2:./" + filename);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
