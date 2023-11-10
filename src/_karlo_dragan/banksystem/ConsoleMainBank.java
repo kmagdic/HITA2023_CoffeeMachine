@@ -10,8 +10,6 @@ public class ConsoleMainBank {
         Bank adiko = new Bank("Adiko", "Banfica");
         System.out.println("Bank " + adiko.getName() + " is generated\n");
 
-       // addClient(adiko);   1.stage
-
         int accountType;
         int choice = 0;
 

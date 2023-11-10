@@ -27,8 +27,8 @@ public class BankConsoleMain {
         accountRepository.createTable();
 
 
-        Bank adiko = new Bank("Adiko", "Banfica");
-        System.out.println("Bank " + adiko.getName() + " is generated\n");
+        Bank ourBank = new Bank("HITA_Bank", "Krapini");
+        System.out.println("Bank " + ourBank.getName() + " is generated\n");
 
         int choice = 0;
 
