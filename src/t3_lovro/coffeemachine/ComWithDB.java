@@ -13,7 +13,6 @@ public class ComWithDB {
         this.conn = conn;
         conn = makeDBConnection(dBPath);
     }
-
     public static Connection makeDBConnection(String dBPath) {
         try {
             return DriverManager.getConnection("jdbc:h2:" + dBPath);
@@ -79,13 +78,13 @@ public class ComWithDB {
     }
 
     public void addCoffeeTypesToDB(CoffeeType coffeeType) {
-        String sql = "INSERT INTO COFFEE_TYPES(name, milk, water, coffee_beans, price) VALUES(?, ?, ?, ? ,?)";
+        String sql = "INSERT INTO COFFEE_TYPES(name, milk, water, coffee_beans, price) VALUES(?, ?, ?, ? ,? )";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, coffeeType.getName());
             pstmt.setInt(2, coffeeType.getMilkNeeded());
             pstmt.setInt(3, coffeeType.getWaterNeeded());
-            pstmt.setInt(3, coffeeType.getCoffeeBeansNeeded());
-            pstmt.setInt(3, coffeeType.getPrice());
+            pstmt.setInt(4, coffeeType.getCoffeeBeansNeeded());
+            pstmt.setInt(5, coffeeType.getPrice());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -110,11 +109,11 @@ public class ComWithDB {
         Statement statement;
         try {
             statement = conn.createStatement();
-            String sqlUpit = "SELECT date_time, coffee_type_id, action FROM machine_log";
+            String sqlUpit = "SELECT date_time, name , action FROM machine_log JOIN coffee_types ON  coffee_type_id = id_coffee_type";
             ResultSet rezultat = statement.executeQuery(sqlUpit);
             while (rezultat.next()) {
                 String dateTime = rezultat.getString("date_time");
-                int coffeeType = rezultat.getInt("coffee_type_id");
+                String coffeeType = rezultat.getString("name");
                 String action = rezultat.getString("action");
                 System.out.println(dateTime + " " + coffeeType + " " + action);
             }
