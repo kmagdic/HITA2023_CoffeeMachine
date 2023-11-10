@@ -40,3 +40,4 @@ bin/
 /coffeemachine.h2.trace.db
 /bank.db.mv.db
 /bank.db.trace.db
+/bank_db.mv.db

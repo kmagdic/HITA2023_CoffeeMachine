@@ -93,7 +93,7 @@ public class CoffeeMachine {
         transactionLog.add(transaction);
     }
 
-    public float takeMoney(){
+    public float takeMoney() {
         float moneyReturn = money;
         money = 0;
         return moneyReturn;
