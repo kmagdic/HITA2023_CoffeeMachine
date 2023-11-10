@@ -7,21 +7,18 @@ import java.util.List;
 
 public class Logger {
 
-    private final List<String> logList = new LinkedList<>();
+    private final LogRepository logRepository;
 
-    void log(String text) {
-        Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-        String formattedDate = simpleDateFormat.format(date);
+    public Logger(LogRepository repository) {
+        this.logRepository = repository;
+    }
 
-        String logText = "Date: " + formattedDate + " " + text;
-        logList.add(logText);
+    void log(CoffeeType coffee, boolean success) {
+        Date currentDate = new Date(System.currentTimeMillis());
+        logRepository.logTransaction(currentDate, coffee, success, 1);
     }
 
     void printLog() {
-        for (String log: logList) {
-            System.out.println(log);
-        }
+        //TODO: Dodati sql query za dohvacanje svih logova, slicno kao za dohvacanje svih kava
     }
-
 }

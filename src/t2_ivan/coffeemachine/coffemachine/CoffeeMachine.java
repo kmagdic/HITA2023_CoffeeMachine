@@ -19,18 +19,24 @@ public class CoffeeMachine {
     private String adminPassword = "admin12345";
     private final String statusFileName = "coffee_machine_status.txt";
     private final Logger logger;
+    private final CoffeeRepository coffeeRepository;
 
-    public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money, Logger logger) {
+    public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money, Logger logger, CoffeeRepository coffeeRepository) {
         this.water = water;
         this.milk = milk;
         this.coffeeBeans = coffeeBeans;
         this.cups = cups;
         this.money = money;
         this.logger = logger;
+        this.coffeeRepository = coffeeRepository;
 
-        coffeeTypes[0] = new CoffeeType("Espresso", 350, 0,16,4);
-        coffeeTypes[1] = new CoffeeType("Latte",350, 75,20,7);
-        coffeeTypes[2] = new CoffeeType("Capuccino",200, 100,12,6);
+        if (coffeeRepository.getCoffees().size() != 3) {
+            coffeeRepository.addCoffee(new CoffeeType(null, "Espresso", 350, 0,16,4));
+            coffeeRepository.addCoffee(new CoffeeType(null, "Latte",350, 75,20,7));
+            coffeeRepository.addCoffee(new CoffeeType(null, "Cappuccino",200, 100,12,6));
+        }
+
+        coffeeRepository.getCoffees().toArray(coffeeTypes);
     }
 
     public CoffeeType[] getCoffeeTypes() {
@@ -70,8 +76,7 @@ public class CoffeeMachine {
     public void buyCoffee(CoffeeType coffeeType){
         if (hasEnoughResources(coffeeType)) {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
-            String logText = "coffee type: " + coffeeType.getName() + " action: Bought";
-            logger.log(logText);
+            logger.log(coffeeType, true);
 
             this.water -= coffeeType.getWaterNeeded();
             this.milk -= coffeeType.getMilkNeeded();
@@ -81,8 +86,7 @@ public class CoffeeMachine {
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
-            String logText = "coffee type: " + coffeeType.getName() + " action: Not bought, not enough ingredients";
-            logger.log(logText);
+            logger.log(coffeeType, false);
         }
     }
 

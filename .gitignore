@@ -38,3 +38,6 @@ bin/
 /banksystem.h2.trace.db
 /coffeemachine.h2.mv.db
 /coffeemachine.h2.trace.db
+/ivan_bank.mv.db
+/ivan_bank.trace.db
+/ivan_coffee.mv.db

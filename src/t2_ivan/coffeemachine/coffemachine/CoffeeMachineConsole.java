@@ -5,17 +5,21 @@ import java.util.Scanner;
 public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
-
+    private static CoffeeRepository coffeeRepository;
+    private static LogRepository logRepository;
 
     public static void main(String[] args)  {
+        DatabaseManager db = new DatabaseManager("ivan_coffee");
+        coffeeRepository = new CoffeeRepository(db.getConnection());
+        logRepository = new LogRepository(db.getConnection());
         CoffeeMachineConsole console = new CoffeeMachineConsole();
         console.run();
     }
 
     void run() {
-        Logger logger = new Logger();
+        Logger logger = new Logger(logRepository);
 
-        CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550, logger);
+        CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550, logger, coffeeRepository);
         System.out.println("Welcome to Coffee Machine 1.0 version Ivan");
         boolean startedSuccessfully = machine.start();
 
@@ -123,7 +127,4 @@ public class CoffeeMachineConsole {
             }
         }
     }
-
-
-
 }
