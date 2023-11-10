@@ -1,5 +1,6 @@
 package _karlo_dragan.bankclientdb;
 
+
 public class Client {
     private int id;
     private String firstName;
@@ -57,6 +58,15 @@ public class Client {
         this.oib = oib;
     }
 
+    /*
+    public void addAccount(Account account ){
+        accountsList.add(account);
+    }
+
+    public List<Account> getAccountsList() {
+        return accountsList;
+    }
+     */
     @Override
     public String toString() {
         return "Client{" +
@@ -67,3 +77,4 @@ public class Client {
                 '}';
     }
 }
+

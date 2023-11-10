@@ -1,29 +1,27 @@
 package t3_lovro.coffeemachine;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
-    static List<CoffeeType> coffeeType = new ArrayList<>();
+
     String fileName = "src/t3_lovro/coffeemachine/coffeemachine.txt";
     static String dBPath = "./coffeemachine.h2";
     ComWithDB comWithDB = new ComWithDB(dBPath);
+
     public static void main(String[] args) {
 
         CoffeeMachineConsole console = new CoffeeMachineConsole();
         console.run();
-
     }
 
     void run() {
         comWithDB.createSchema();
-        coffeeType = comWithDB.coffeeType();
         CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
         System.out.println("Welcome to Coffee Machine 2.0 version Lovro");
-                boolean startedSuccessfully = machine.start();
+        CoffeeMachine.coffeeType = comWithDB.coffeeType();
+        boolean startedSuccessfully = machine.start();
         if (!startedSuccessfully) {
             System.out.println("Coffee machine started but without file. Using default values.");
         }
@@ -63,25 +61,21 @@ public class CoffeeMachineConsole {
     }
 
     private void buyAction(CoffeeMachine machine) {
-
-                if (3 <= coffeeType.size()) {
+        if (3 <= CoffeeMachine.coffeeType.size()) {
             System.out.println("Choice: ");
-            coffeeType = comWithDB.coffeeType();
-            for (CoffeeType c : coffeeType) {
+            CoffeeMachine.coffeeType = comWithDB.coffeeType();
+            for (CoffeeType c : CoffeeMachine.coffeeType) {
                 System.out.println(c.getId() + ". " + c.getName() + " " + c.getPrice());
-
-
             }
             System.out.println();
             System.out.println("Enter your choice: ");
 
             int typeOfCoffeeChoice = sc.nextInt();
-            if (typeOfCoffeeChoice <= coffeeType.size() - 1) {
-                String c = machine.buyCoffee(coffeeType.get(typeOfCoffeeChoice));
-                comWithDB.addTransactionToLog(coffeeType.get(typeOfCoffeeChoice), c);
+            if (typeOfCoffeeChoice <= CoffeeMachine.coffeeType.size() - 1) {
+                String c = machine.buyCoffee(CoffeeMachine.coffeeType.get(typeOfCoffeeChoice));
+                comWithDB.addTransactionToLog(CoffeeMachine.coffeeType.get(typeOfCoffeeChoice), c);
             } else {
                 System.out.println("Wrong enter\n");
-
             }
         } else {
             System.out.println("Choice: ");
@@ -161,7 +155,7 @@ public class CoffeeMachineConsole {
                     int newMilk = sc.nextInt();
                     System.out.println("How much water is needed for new coffee type? ");
                     int newWater = sc.nextInt();
-                    System.out.println("How much coffee is needed for new coffee type? ");
+                    System.out.println("How much coffee beans is needed for new coffee type? ");
                     int newCoffee = sc.nextInt();
                     System.out.println("What ll be the price for new coffee type ? ");
                     int newPrice = sc.nextInt();

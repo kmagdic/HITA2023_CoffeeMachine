@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class CoffeeMachine {
@@ -13,11 +15,21 @@ public class CoffeeMachine {
     private int coffeeBeans;
     private int cups;
     private float money;
-    private CoffeeType[] coffeeTypes = new CoffeeType[3];
+    private final CoffeeType[] coffeeTypes = new CoffeeType[3];
 
+    public static List<CoffeeType> getCoffeeType() {
+        return coffeeType;
+    }
+
+    public static void setCoffeeType(List<CoffeeType> coffeeType) {
+        CoffeeMachine.coffeeType = coffeeType;
+    }
+
+    static List<CoffeeType> coffeeType = new ArrayList<>();
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
     private final String statusFileName = "coffeemachine.txt";
+
 
 
     public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) {
@@ -58,18 +70,14 @@ public class CoffeeMachine {
         return money;
     }
 
-
     public boolean hasEnoughResources(CoffeeType coffeeType) {
-        if (water >= coffeeType.getWaterNeeded() &&
+        return water >= coffeeType.getWaterNeeded() &&
                 milk >= coffeeType.getMilkNeeded() &&
                 coffeeBeans >= coffeeType.getCoffeeBeansNeeded() &&
-                cups >= 1) {
-            return true;
-        } else
-            return false;
+                cups >= 1;
     }
 
-    public  String buyCoffee(CoffeeType coffeeType) {
+    public String buyCoffee(CoffeeType coffeeType) {
         if (hasEnoughResources(coffeeType)) {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
 
@@ -84,9 +92,8 @@ public class CoffeeMachine {
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
-            String a = "Not bought, no enough ingredients: " + missing ;
 
-            return a;
+            return "Not bought, no enough ingredients: " + missing;
         }
     }
 
@@ -118,10 +125,7 @@ public class CoffeeMachine {
     }
 
     public boolean login(String username, String password) {
-        if (adminUsername.equals(username) && adminPassword.equals(password)) {
-            return true;
-        } else
-            return false;
+        return adminUsername.equals(username) && adminPassword.equals(password);
     }
 
     public boolean loadFromFile(String fileName) {

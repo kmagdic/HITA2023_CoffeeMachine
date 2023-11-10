@@ -2,7 +2,7 @@ package t4_zoran.coffeemachine.bankclientdb;
 
 import _karlo_dragan.bankclientdb.Bank;
 import _karlo_dragan.bankclientdb.Client;
-import _karlo_dragan.bankclientdb.ClientRepository;
+import _karlo_dragan.bankclientdb.repositories.ClientRepository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -57,7 +57,7 @@ public class BankConsoleMain {
                     break;
 
                 case 2:
-                    clientList =  clientRepository.clientList();
+                    clientList =  clientRepository.getListOfALlClients();
                     for (Client c : clientList) {
                         System.out.println(c.getFirstName() + " " + c.getLastName() + " " + c.getAddress() + " " + c.getOib());
                     }
@@ -67,7 +67,7 @@ public class BankConsoleMain {
                 case 3:
                     System.out.println("OIB: ");
                     String oib= s.next();
-                    clientList =  clientRepository.clientList();
+                    clientList =  clientRepository.getListOfALlClients();
                     Client c = findClient(oib);
 
                     if (c == null){
