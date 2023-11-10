@@ -1,19 +1,19 @@
-package _karlo_dragan.bankclientdb;
+package t1_sinisa.bankclientdb;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ClientRepository {
+
     Connection conn;
 
     public ClientRepository(Connection conn) {
         this.conn = conn;
     }
 
-    public void createTable (){
-        try {
+    public  void createTable () {
+        try{
             String sqlCreateTable = "CREATE TABLE IF NOT EXISTS client (\n" +
                     "id integer PRIMARY KEY auto_increment, \n" +
                     "first_name text NOT NULL, \n" +
@@ -29,13 +29,11 @@ public class ClientRepository {
         }
     }
 
-    public void insertClient (Client c){
-
-        String sqlInsert = "INSERT INTO client (first_name, last_name, address_name, OIB) VALUES (?,?,?,?)";
+    public void insertClient (Client c) {
+        String sqlInsert = "INSERT INTO client (first_name, last_name, address_name, OIB) VALUES (?, ?, ?, ?)";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sqlInsert);
-
             ps.setString(1, c.getFirstName());
             ps.setString(2, c.getLastName());
             ps.setString(3, c.getAddress());
@@ -47,9 +45,9 @@ public class ClientRepository {
             throw new RuntimeException(e);
         }
     }
-    public List<Client> clientList () {
 
-        String sqlAllRecords = "SELECT * FROM  client";
+    public List<Client> clientList () {
+        String sqlAllRecords = "SELECT * FROM client";
 
         List<Client> resultList = new ArrayList<>();
 
@@ -57,7 +55,7 @@ public class ClientRepository {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sqlAllRecords);
 
-            while (rs.next()){
+            while (rs.next()) {
                 Client c = new Client();
                 c.setId(rs.getInt("id"));
                 c.setFirstName(rs.getString("first_name"));
@@ -67,7 +65,6 @@ public class ClientRepository {
 
                 resultList.add(c);
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -89,6 +86,7 @@ public class ClientRepository {
             ps.setString(3,c.getAddress());
             ps.setString(4,c.getOib());
             ps.setInt(5,c.getId());
+
 
             ps.executeUpdate();
 

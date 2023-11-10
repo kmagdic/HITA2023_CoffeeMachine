@@ -56,13 +56,10 @@ public class CoffeeMachine {
     }
 
     public boolean hasEnoughResources(CoffeeType coffeeType){
-        if (water >= coffeeType.getWaterNeeded() &&
+        return water >= coffeeType.getWaterNeeded() &&
                 milk >= coffeeType.getMilkNeeded() &&
                 coffeeBeans >= coffeeType.getCoffeeBeansNeeded() &&
-                cups >= 1) {
-            return true;
-        } else
-            return false;
+                cups >= 1;
     }
 
     public void buyCoffee(CoffeeType coffeeType){

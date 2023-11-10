@@ -1,8 +1,5 @@
-package t4_zoran.coffeemachine.bankclientdb;
+package t1_sinisa.bankclientdb;
 
-import _karlo_dragan.bankclientdb.Bank;
-import _karlo_dragan.bankclientdb.Client;
-import _karlo_dragan.bankclientdb.repositories.ClientRepository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -12,14 +9,13 @@ import java.util.Scanner;
 
 public class BankConsoleMain {
     static Scanner s = new Scanner(System.in);
-    static List<_karlo_dragan.bankclientdb.Client> clientList = new ArrayList<>();
+    static List<Client> clientList = new ArrayList<>();
     public static void main(String[] args) {
 
         Connection conn;
         conn = makeDBConnection("bank.db");
 
         ClientRepository clientRepository = new ClientRepository(conn);
-
         clientRepository.createTable();
 
 
@@ -54,27 +50,25 @@ public class BankConsoleMain {
                     newClient.setOib(s.next());
 
                     clientRepository.insertClient(newClient);
+
                     break;
 
                 case 2:
-                    clientList =  clientRepository.getListOfALlClients();
+                    clientList = clientRepository.clientList();
                     for (Client c : clientList) {
                         System.out.println(c.getFirstName() + " " + c.getLastName() + " " + c.getAddress() + " " + c.getOib());
                     }
-                    System.out.println();
+
                     break;
 
                 case 3:
                     System.out.println("OIB: ");
-                    String oib= s.next();
-                    clientList =  clientRepository.getListOfALlClients();
+                    String oib = s.next();
                     Client c = findClient(oib);
 
-                    if (c == null){
-                        System.out.println("Client doesnt't exists");
-                    }
-                    else {
-
+                    if (c == null) {
+                        System.out.println("Client doesn't exists");
+                    } else {
                         System.out.println("First name:");
                         c.setFirstName(s.next());
                         System.out.println("Last name:");
@@ -93,7 +87,7 @@ public class BankConsoleMain {
 
                     System.out.println("OIB: ");
                     String o = s.next();
-                    _karlo_dragan.bankclientdb.Client clientToDelete = findClient(o);
+                    Client clientToDelete = findClient(o);
 
                     if (clientToDelete == null){
                         System.out.println("Client doesnt exists");
@@ -101,6 +95,7 @@ public class BankConsoleMain {
                     else {
                         clientRepository.delete(clientToDelete);
                     }
+
             }
         }
     }
@@ -112,13 +107,13 @@ public class BankConsoleMain {
             throw new RuntimeException(e);
         }
     }
-    public static Client findClient (String oib){
+
+    public static Client findClient (String oib) {
         for (Client c: clientList) {
-            if (oib.equals(c.getOib())) {
+            if(oib.equals(c.getOib())) {
                 return c;
             }
         }
         return null;
     }
 }
-
