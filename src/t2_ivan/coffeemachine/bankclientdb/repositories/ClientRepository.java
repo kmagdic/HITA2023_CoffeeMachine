@@ -1,22 +1,24 @@
-package t2_ivan.coffeemachine.bankclientdb;
+package t2_ivan.coffeemachine.bankclientdb.repositories;
+
+import t2_ivan.coffeemachine.bankclientdb.Client;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountRepository {
+public class ClientRepository {
     Connection conn;
-    public AccountRepository(Connection conn) {
+    public ClientRepository(Connection conn) {
         this.conn = conn;
     }
 
     public void createTable(){
         try {
-            String sqlCreateTable = "CREATE TABLE IF NOT EXISTS account (\n" +
+            String sqlCreateTable = "CREATE TABLE IF NOT EXISTS client (\n" +
                     "id integer PRIMARY KEY auto_increment, \n" +
-                    "name text NOT NULL, \n" +
-                    "balance decimal NOT NULL, \n" +
-                    "client_id INT NOT NULL, \n" +
+                    "first_name text NOT NULL, \n" +
+                    "last_name text NOT NULL, \n" +
+                    "address_name text NOT NULL, \n" +
                     "oib text NOT NULL\n)";
 
             Statement st = conn.createStatement();
@@ -27,16 +29,17 @@ public class AccountRepository {
         }
     }
 
-public void inesrt (Account a) {
+public void insertClient (Client c) {
 
-    String sqlInsert = "INSERT INTO account (name, balance, client_id) VALUES (?,?,?)";
+    String sqlInsert = "INSERT INTO client (first_name, last_name, address_name, OIB) VALUES (?,?,?,?)";
 
     try {
         PreparedStatement ps = conn.prepareStatement(sqlInsert);
 
-        ps.setString(1, a.getAccountName());
-        ps.setDouble(2, a.getBalance());
-        ps.setInt(3, a.getClient().getId());
+        ps.setString(1, c.getFirstName());
+        ps.setString(2, c.getLastName());
+        ps.setString(3, c.getAddress());
+        ps.setString(4, c.getOib());
 
         ps.executeUpdate();
 
@@ -45,17 +48,17 @@ public void inesrt (Account a) {
     }
     }
 
-    public List<Client> getListForClient (Client client) {
-        String sqlAllRecords = "SELECT * FROM account where client_id + " + client.getId();
+    public List<Client> getListOfALlClients () {
+        String sqlPrint = "SELECT * FROM client";
 
         List<Client> resultList = new ArrayList<>();
 
         try {
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sqlAllRecords);
+            ResultSet rs = st.executeQuery(sqlPrint);
 
             while (rs.next()){
-                Account a = new Account();
+                Client c = new Client();
                 c.setId(rs.getInt("id"));
                 c.setFirstName(rs.getString("first_name"));
                 c.setLastName(rs.getString("last_name"));

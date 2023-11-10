@@ -5,9 +5,15 @@ public class Account {
     private double balance;
     private Client client;
 
+    private int id;
+
     public Account(String accountName, double balance) {
         this.accountName = accountName;
         this.balance = balance;
+    }
+
+    public Account() {
+
     }
 
     public String getAccountName() {
@@ -40,19 +46,29 @@ public class Account {
         this.balance += money;
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "name='" + accountName + '\'' +
-                ", balance=" + balance +
-                '}';
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public Client getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", accountName='" + accountName + '\'' +
+                ", balance=" + balance +
+                ", client=" + client +
+                '}';
     }
 }
