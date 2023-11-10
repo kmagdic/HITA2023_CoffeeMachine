@@ -1,4 +1,4 @@
-package _karlo_dragan.bankclientdb;
+package t1_sinisa.bankclientdb;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,7 +16,6 @@ public class BankConsoleMain {
         conn = makeDBConnection("bank.db");
 
         ClientRepository clientRepository = new ClientRepository(conn);
-
         clientRepository.createTable();
 
 
@@ -51,27 +50,25 @@ public class BankConsoleMain {
                     newClient.setOib(s.next());
 
                     clientRepository.insertClient(newClient);
+
                     break;
 
                 case 2:
-                   clientList =  clientRepository.clientList();
+                    clientList = clientRepository.clientList();
                     for (Client c : clientList) {
                         System.out.println(c.getFirstName() + " " + c.getLastName() + " " + c.getAddress() + " " + c.getOib());
                     }
-                    System.out.println();
+
                     break;
 
                 case 3:
                     System.out.println("OIB: ");
-                    String oib= s.next();
-                    clientList =  clientRepository.clientList();
+                    String oib = s.next();
                     Client c = findClient(oib);
 
-                    if (c == null){
-                        System.out.println("Client doesnt't exists");
-                    }
-                    else {
-
+                    if (c == null) {
+                        System.out.println("Client doesn't exists");
+                    } else {
                         System.out.println("First name:");
                         c.setFirstName(s.next());
                         System.out.println("Last name:");
@@ -98,6 +95,7 @@ public class BankConsoleMain {
                     else {
                         clientRepository.delete(clientToDelete);
                     }
+
             }
         }
     }
@@ -109,9 +107,10 @@ public class BankConsoleMain {
             throw new RuntimeException(e);
         }
     }
-    public static Client findClient (String oib){
+
+    public static Client findClient (String oib) {
         for (Client c: clientList) {
-            if (oib.equals(c.getOib())) {
+            if(oib.equals(c.getOib())) {
                 return c;
             }
         }

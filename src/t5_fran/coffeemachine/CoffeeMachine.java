@@ -4,6 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -16,7 +20,6 @@ public class CoffeeMachine {
     private int cups;
     private float money;
     private CoffeeType[] coffeeTypes = new CoffeeType[3];
-    private List<Transaction> transactions = new ArrayList<>();
 
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
@@ -58,8 +61,25 @@ public class CoffeeMachine {
         return money;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public List<Transaction> getTransactions(Connection conn) {
+
+        String sql = "SELECT * from transaction_log";
+
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            List<Transaction> transactions = new ArrayList<>();
+            while (rs.next()) {
+                String dateTime = rs.getString("dateTime");
+                String coffeeType = rs.getString("coffeeType");
+                String action = rs.getString("action");
+                transactions.add(new Transaction(coffeeType, action));
+            }
+            return transactions;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     public void setAdminPassword(String adminPassword) {
@@ -86,12 +106,12 @@ public class CoffeeMachine {
             this.money += coffeeType.getPrice();
             this.cups -= 1;
 
-            transactions.add(new Transaction(coffeeType.getName(), "Bought"));
+            new Transaction(coffeeType.getName(), "Bought");
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
 
-            transactions.add(new Transaction(coffeeType.getName(), "Failed purchase - missing: " + missing));
+            new Transaction(coffeeType.getName(), "Failed purchase - missing: " + missing);
         }
     }
 
