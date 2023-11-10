@@ -30,8 +30,11 @@ public class BankConsoleMain {
             System.out.println("1 - Create - add the new client");
             System.out.println("2 - Read - print all clients");
             System.out.println("3 - Update - update the client by OIB");
-            System.out.println("4 - Delete -  delete the client");
-            System.out.println("5 - Exit");
+            System.out.println("4 - List accounts by client");
+            System.out.println("5 - Add account for client");
+            System.out.println("6 - Add money on account of client");
+            System.out.println("7 - Delete -  delete the client");
+            System.out.println("8 - Exit");
             System.out.print("Enter:");
 
             choice = s.nextInt();
@@ -89,6 +92,12 @@ public class BankConsoleMain {
                     break;
 
                 case 4:
+                    System.out.println("OIB: ");
+                    String oib = s.next();
+                    Client client = findClient(oib);
+                    List<Account> accountList = accountRepository.getListForClient(client);
+
+                case 7:
                     System.out.println("OIB: ");
                     String o = s.next();
                     Client clientToDelete = findClient(o);
