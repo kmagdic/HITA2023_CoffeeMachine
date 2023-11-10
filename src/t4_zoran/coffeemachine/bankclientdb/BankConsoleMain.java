@@ -1,5 +1,8 @@
-package _karlo_dragan.bankclientdb;
+package t4_zoran.coffeemachine.bankclientdb;
 
+import _karlo_dragan.bankclientdb.Bank;
+import _karlo_dragan.bankclientdb.Client;
+import _karlo_dragan.bankclientdb.ClientRepository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,7 +12,7 @@ import java.util.Scanner;
 
 public class BankConsoleMain {
     static Scanner s = new Scanner(System.in);
-    static List<Client> clientList = new ArrayList<>();
+    static List<_karlo_dragan.bankclientdb.Client> clientList = new ArrayList<>();
     public static void main(String[] args) {
 
         Connection conn;
@@ -54,7 +57,7 @@ public class BankConsoleMain {
                     break;
 
                 case 2:
-                   clientList =  clientRepository.clientList();
+                    clientList =  clientRepository.clientList();
                     for (Client c : clientList) {
                         System.out.println(c.getFirstName() + " " + c.getLastName() + " " + c.getAddress() + " " + c.getOib());
                     }
@@ -90,7 +93,7 @@ public class BankConsoleMain {
 
                     System.out.println("OIB: ");
                     String o = s.next();
-                    Client clientToDelete = findClient(o);
+                    _karlo_dragan.bankclientdb.Client clientToDelete = findClient(o);
 
                     if (clientToDelete == null){
                         System.out.println("Client doesnt exists");
@@ -118,3 +121,4 @@ public class BankConsoleMain {
         return null;
     }
 }
+

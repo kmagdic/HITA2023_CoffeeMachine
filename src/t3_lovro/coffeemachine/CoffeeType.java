@@ -7,7 +7,15 @@ public class CoffeeType {
     private int coffeeBeansNeeded;
     private int price;
     private String name;
+public int  id ;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public CoffeeType(String name, int waterNeeded, int milkNeeded, int coffeeBeansNeeded, int price) {
         this.milkNeeded = milkNeeded;
@@ -15,6 +23,10 @@ public class CoffeeType {
         this.coffeeBeansNeeded = coffeeBeansNeeded;
         this.price = price;
         this.name = name;
+    }
+
+    public CoffeeType() {
+
     }
 
     public String getName() {

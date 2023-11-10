@@ -2,21 +2,19 @@ package t4_zoran.coffeemachine;
 
 public class CoffeeType {
 
-    private int milkNeeded;
     private int waterNeeded;
+    private int milkNeeded;
     private int coffeeBeansNeeded;
-    private final int cupsNeeded;
     private int price;
     private String name;
 
 
     public CoffeeType(String name, int waterNeeded, int milkNeeded, int coffeeBeansNeeded, int price) {
-        this.milkNeeded = milkNeeded;
-        this.waterNeeded = waterNeeded;
-        this.coffeeBeansNeeded = coffeeBeansNeeded;
-        this.cupsNeeded = 1;
-        this.price = price;
         this.name = name;
+        this.waterNeeded = waterNeeded;
+        this.milkNeeded = milkNeeded;
+        this.coffeeBeansNeeded = coffeeBeansNeeded;
+        this.price = price;
     }
 
     public String getName() {
@@ -59,7 +57,4 @@ public class CoffeeType {
         this.coffeeBeansNeeded = coffeeBeansNeeded;
     }
 
-    public int getCupsNeeded() {
-        return cupsNeeded;
-    }
 }
