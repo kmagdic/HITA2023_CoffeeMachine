@@ -1,5 +1,4 @@
-package _karlo_dragan.bankclientdb;
-
+package t1_sinisa.bankclientdb;
 
 public class Client {
     private int id;
@@ -58,15 +57,6 @@ public class Client {
         this.oib = oib;
     }
 
-    /*
-    public void addAccount(Account account ){
-        accountsList.add(account);
-    }
-
-    public List<Account> getAccountsList() {
-        return accountsList;
-    }
-     */
     @Override
     public String toString() {
         return "Client{" +
@@ -77,4 +67,3 @@ public class Client {
                 '}';
     }
 }
-

@@ -42,3 +42,11 @@ bin/
 /ivan_bank.trace.db
 /ivan_coffee.mv.db
 /ivan_coffee.trace.db
+/bank.db.mv.db
+/bank.db.trace.db
+/.gradle/
+/build/
+/gradle/
+/gradlew
+/gradlew.bat
+/bank_db.mv.db

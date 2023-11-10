@@ -61,7 +61,7 @@ public class DBConnection {
     }
 
     public void readLog () {
-        String selectFromSql = "SELECT date_time, drink_type, buy_status, explanation FROM log_buying";
+        String selectFromSql = "SELECT * FROM log_buying";
 
         try {
             Statement stmt = conn.createStatement();

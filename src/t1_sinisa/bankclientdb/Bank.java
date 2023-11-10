@@ -1,4 +1,4 @@
-package _karlo_dragan.bankclientdb;
+package t1_sinisa.bankclientdb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,6 @@ public class Bank {
     public String getAddress() {
         return address;
     }
-
 
     @Override
     public String toString() {

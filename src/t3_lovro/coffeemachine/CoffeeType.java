@@ -7,7 +7,8 @@ public class CoffeeType {
     private int coffeeBeansNeeded;
     private int price;
     private String name;
-public int  id ;
+
+    public int id;
 
     public int getId() {
         return id;
