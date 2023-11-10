@@ -1,37 +1,32 @@
 package t4_zoran.coffeemachine;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.sql.*;
 
 public class CoffeeMachine {
-    private static final Logger logger = LoggerFactory.getLogger(CoffeeMachine.class);
-
-    public static Scanner sc = new Scanner(System.in);
-
     private int water;
     private int milk;
     private int coffeeBeans;
     private int cups;
     private float money;
+
+    private final Connection conn;
+
     private final CoffeeType[] coffeeTypes = new CoffeeType[3];
 
     private String adminUsername = "admin";
     private String adminPassword = "admin123";
 
-    public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) throws IOException {
+    public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money, Connection conn) {
         this.water = water;
         this.milk = milk;
         this.coffeeBeans = coffeeBeans;
         this.cups = cups;
         this.money = money;
+        this.conn = conn;
 
         coffeeTypes[0] = new CoffeeType("Espresso", 350, 0, 16, 4);
         coffeeTypes[1] = new CoffeeType("Latte",350, 75, 20, 7);
-        coffeeTypes[2] = new CoffeeType("Cappuccino", 200, 100, 12, 6);
+        coffeeTypes[2] = new CoffeeType("Capuccino", 200, 100, 12, 6);
     }
 
     public CoffeeType[] getCoffeeTypes() {
@@ -70,10 +65,6 @@ public class CoffeeMachine {
         this.water = water;
     }
 
-    public static void setSc(Scanner sc) {
-        CoffeeMachine.sc = sc;
-    }
-
     public void setMilk(int milk) {
         this.milk = milk;
     }
@@ -102,36 +93,31 @@ public class CoffeeMachine {
         return water >= coffeeType.getWaterNeeded() &&
                 milk >= coffeeType.getMilkNeeded() &&
                 coffeeBeans >= coffeeType.getCoffeeBeansNeeded() &&
-                cups >= coffeeType.getCupsNeeded();
-    }
-
-    private String getFormattedDateTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        Date date = new Date();
-        return dateFormat.format(date);
+                cups > 0;
     }
 
     public void buyCoffee(CoffeeType coffeeType){
+        String missing = calculateWhichIngredientIsMissing(coffeeType);
+        boolean success;
+
         if (hasEnoughResources(coffeeType)) {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
-
-            String logMessage = "Date/time: " + getFormattedDateTime() + ", coffee type: " +
-                                 coffeeType.getName() + ", action: Bought";
-            logger.info(logMessage);
 
             this.water -= coffeeType.getWaterNeeded();
             this.milk -= coffeeType.getMilkNeeded();
             this.coffeeBeans -= coffeeType.getCoffeeBeansNeeded();
             this.money += coffeeType.getPrice();
             this.cups -= 1;
+            success = true;
         } else {
-            String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
-
-            String logMessage = "Date/time: " + getFormattedDateTime() + ", coffee type: " + coffeeType.getName() +
-                                ", action: Not bought, not enough ingredients: " + missing;
-            logger.info(logMessage);
+            success = false;
         }
+
+        Transaction transaction = new Transaction(coffeeType.getName(), success, missing);
+
+        DatabaseManager dbm = new DatabaseManager(conn);
+        dbm.insertTransaction(transaction);
     }
 
     public float takeMoney(){
@@ -150,7 +136,7 @@ public class CoffeeMachine {
         }
         else if (coffeeBeans < coffeeType.getCoffeeBeansNeeded()) {
             ingredientMissing = "coffee beans" ;
-        }        else if (cups < coffeeType.getCupsNeeded()) {
+        }        else if (cups < 1) {
             ingredientMissing = "cups" ;
         }
         return ingredientMissing;
@@ -167,14 +153,21 @@ public class CoffeeMachine {
         return adminUsername.equals(username) && adminPassword.equals(password.trim());
     }
 
-    @Override
-    public String toString() {
-        return "CoffeeMachine{" +
-                "water=" + water +
-                ", milk=" + milk +
-                ", coffeeBeans=" + coffeeBeans +
-                ", cups=" + cups +
-                ", money=" + money +
-                '}';
+    public boolean passwordIsStrong(String newPassword){
+
+        boolean containsDigit = false;
+
+        for (char c : newPassword.toCharArray()) {
+            if (Character.isDigit(c)) {
+                containsDigit = true;
+                break;
+            }
+        }
+
+        if (newPassword.length() > 6 && containsDigit) {
+            setAdminPassword(newPassword);
+            return true;
+        } else
+            return false;
     }
 }
