@@ -1,7 +1,7 @@
 package t4_luka.coffeemachine;
 
 public class CoffeeType {
-
+    private int ID;
     private int milkNeeded;
     private int waterNeeded;
     private int coffeeBeansNeeded;
@@ -9,7 +9,8 @@ public class CoffeeType {
     private String name;
 
 
-    public CoffeeType(String name, int waterNeeded, int milkNeeded, int coffeeBeansNeeded, int price) {
+    public CoffeeType(int ID, String name, int waterNeeded, int milkNeeded, int coffeeBeansNeeded, int price) {
+        this.ID = ID;
         this.milkNeeded = milkNeeded;
         this.waterNeeded = waterNeeded;
         this.coffeeBeansNeeded = coffeeBeansNeeded;
@@ -55,6 +56,10 @@ public class CoffeeType {
 
     public void setCoffeeBeansNeeded(int coffeeBeansNeeded) {
         this.coffeeBeansNeeded = coffeeBeansNeeded;
+    }
+
+    public int getID() {
+        return ID;
     }
 }
 
