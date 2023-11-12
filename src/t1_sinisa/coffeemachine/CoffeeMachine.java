@@ -1,5 +1,8 @@
 package t1_sinisa.coffeemachine;
 
+
+import t1_sinisa.coffeemachine.repositories.TransactionRepository;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -21,9 +24,9 @@ public class CoffeeMachine {
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
     private String statusFileName = "coffee_machine_status.txt";
-    private CoffeeType espresso = new CoffeeType("Espresso", 350, 0, 16, 4);
-    private CoffeeType latte = new CoffeeType("Latte", 350, 75, 20, 7);
-    private CoffeeType cappuccino = new CoffeeType("Cappuccino", 200, 100, 12, 6);
+    //private CoffeeType espresso = new CoffeeType("Espresso", 350, 0, 16, 4);
+    //private CoffeeType latte = new CoffeeType("Latte", 350, 75, 20, 7);
+    //private CoffeeType cappuccino = new CoffeeType("Cappuccino", 200, 100, 12, 6);
     //private Log log = new Log();
 
     public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) {
@@ -33,9 +36,9 @@ public class CoffeeMachine {
         this.cups = cups;
         this.money = money;
 
-        coffeeTypesList.add(espresso);
-        coffeeTypesList.add(latte);
-        coffeeTypesList.add(cappuccino);
+        //coffeeTypesList.add(espresso);
+        //coffeeTypesList.add(latte);
+        //coffeeTypesList.add(cappuccino);
     }
 
     public List<CoffeeType> getCoffeeTypes() {
@@ -72,19 +75,17 @@ public class CoffeeMachine {
             return false;
     }
 
-    public void buyCoffee(CoffeeType coffeeType, Log log){
+    public void buyCoffee(CoffeeType coffeeType, Transaction transaction, TransactionRepository transactionRepository){
         Date date = new Date(System.currentTimeMillis());
-        DBConnection dbConnection = new DBConnection();
-        dbConnection.makeDBConnection("./coffeemachine.h2");
-        dbConnection.createSchema(dbConnection.getConn());
+
+
         if (hasEnoughResources(coffeeType)) {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
 
-            log.setFormattedDate(date);
-            log.setDrinkType(coffeeType.getName());
-            log.setBuyStatus("bought");
-            log.setExplanation("");
-            dbConnection.addLog(log);
+            transaction.setFormattedDate(date);
+            transaction.setDrinkType(coffeeType.getName());
+            transaction.setBuyStatus("bought");
+            transactionRepository.addTransaction(transaction);
 
             this.water -= coffeeType.getWaterNeeded();
             this.milk -= coffeeType.getMilkNeeded();
@@ -93,13 +94,12 @@ public class CoffeeMachine {
             this.cups -= 1;
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
-            System.out.println("Sorry, not enough " + missing + "\n");
+            System.out.println("Cannot make you a coffee, missing: " + missing + "\n");
 
-            log.setFormattedDate(date);
-            log.setDrinkType(coffeeType.getName());
-            log.setBuyStatus("not bought");
-            log.setExplanation("not enough " + missing);
-            dbConnection.addLog(log);
+            transaction.setFormattedDate(date);
+            transaction.setDrinkType(coffeeType.getName());
+            transaction.setBuyStatus("not bought");
+            transactionRepository.addTransaction(transaction);
 
         }
     }

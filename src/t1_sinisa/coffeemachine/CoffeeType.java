@@ -2,6 +2,7 @@ package t1_sinisa.coffeemachine;
 
 public class CoffeeType {
 
+    private int id;
     private int milkNeeded;
     private int waterNeeded;
     private int coffeeBeansNeeded;
@@ -9,13 +10,13 @@ public class CoffeeType {
     private String name;
 
 
-    public CoffeeType(String name, int waterNeeded, int milkNeeded, int coffeeBeansNeeded, int price) {
-        this.milkNeeded = milkNeeded;
-        this.waterNeeded = waterNeeded;
-        this.coffeeBeansNeeded = coffeeBeansNeeded;
-        this.price = price;
-        this.name = name;
+    public CoffeeType() {
+
     }
+
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
 
     public String getName() {
         return name;
