@@ -7,9 +7,12 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class CoffeeMachineWithStatusInFile extends CoffeeMachine {
+
     public CoffeeMachineWithStatusInFile(int water, int milk, int coffeeBeans, int cups, float money) {
         super(water, milk, coffeeBeans, cups, money);
     }
+
+
     public boolean loadFromFile(String fileName)  {
         FileReader reader = null;
 

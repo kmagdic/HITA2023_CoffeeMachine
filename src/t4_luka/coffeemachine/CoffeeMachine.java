@@ -28,9 +28,9 @@ public class CoffeeMachine {
         this.cups = cups;
         this.money = money;
 
-        coffeeTypes[0] = new CoffeeType("Espresso", 350, 0,16,4);
-        coffeeTypes[1] = new CoffeeType("Latte",350, 75,20,7);
-        coffeeTypes[2] = new CoffeeType("Capuccino",200, 100,12,6);
+        coffeeTypes[0] = new CoffeeType(1,"Espresso", 350, 0,16,4);
+        coffeeTypes[1] = new CoffeeType(2, "Latte",350, 75,20,7);
+        coffeeTypes[2] = new CoffeeType(3, "Capuccino",200, 100,12,6);
     }
 
     public CoffeeType[] getCoffeeTypes() {
@@ -80,16 +80,16 @@ public class CoffeeMachine {
             this.coffeeBeans -= coffeeType.getCoffeeBeansNeeded();
             this.money += coffeeType.getPrice();
             this.cups -= 1;
-            Transaction transaction = new Transaction("coffee type: " + coffeeType.getName() + ", action: bought");
+            Transaction transaction = new Transaction("action: bought");
             logList.add(transaction);
-            CoffeeMachineConsole.addLog(transaction.getCroatianDateStr(), transaction.getWhatHappened());
+            CoffeeMachineConsole.addTransactionLog(transaction.getCroatianDateStr(),coffeeType.getID(), transaction.getSuccess());
 
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
-            Transaction transaction = new Transaction("coffee type: " + coffeeType.getName() + ", action: not bought, not enough ingeredients: " + missing);
+            Transaction transaction = new Transaction("action: not bought, not enough ingeredients: " + missing);
             logList.add(transaction);
-            CoffeeMachineConsole.addLog(transaction.getCroatianDateStr(), transaction.getWhatHappened());
+            CoffeeMachineConsole.addTransactionLog(transaction.getCroatianDateStr(), coffeeType.getID(), transaction.getSuccess());
         }
     }
 

@@ -9,7 +9,7 @@ public class BankClientConsoleMain {
     public static void main(String[] args) {
         makeDBConnection("./banksystem.h2");
         createSchema(conn);
-        addUser("Dragan", "Sačer", "dragan@agileway.com", "dsacer", "test123");
+        addUser("Dragan", "Sacer", "dragan@agileway.com", "dsacer", "test123");
 
     }
 

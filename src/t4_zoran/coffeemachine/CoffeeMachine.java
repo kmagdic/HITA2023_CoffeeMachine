@@ -1,6 +1,8 @@
 package t4_zoran.coffeemachine;
 
 import java.sql.*;
+import java.util.*;
+import t4_zoran.coffeemachine.repositories.*;
 
 public class CoffeeMachine {
     private int water;
@@ -11,7 +13,7 @@ public class CoffeeMachine {
 
     private final Connection conn;
 
-    private final CoffeeType[] coffeeTypes = new CoffeeType[3];
+    private List<CoffeeType> coffeeTypes = new ArrayList<>();
 
     private String adminUsername = "admin";
     private String adminPassword = "admin123";
@@ -24,12 +26,11 @@ public class CoffeeMachine {
         this.money = money;
         this.conn = conn;
 
-        coffeeTypes[0] = new CoffeeType("Espresso", 350, 0, 16, 4);
-        coffeeTypes[1] = new CoffeeType("Latte",350, 75, 20, 7);
-        coffeeTypes[2] = new CoffeeType("Capuccino", 200, 100, 12, 6);
+    CoffeeTypeRepository ct = new CoffeeTypeRepository(conn);
+        coffeeTypes = ct.getListOfRecipes();
     }
 
-    public CoffeeType[] getCoffeeTypes() {
+    public List<CoffeeType> getCoffeeTypes() {
         return coffeeTypes;
     }
 
@@ -114,10 +115,9 @@ public class CoffeeMachine {
             success = false;
         }
 
-        Transaction transaction = new Transaction(coffeeType.getName(), success, missing);
-
-        DatabaseManager dbm = new DatabaseManager(conn);
-        dbm.insertTransaction(transaction);
+        Transaction transaction = new Transaction(coffeeType.getCoffeeTypeID(), success, missing);
+        TransactionRepository transactionRepository = new TransactionRepository(conn);
+        transactionRepository.insertTransaction(transaction);
     }
 
     public float takeMoney(){

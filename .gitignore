@@ -40,3 +40,9 @@ bin/
 /coffeemachine.h2.trace.db
 /bank.db.mv.db
 /bank.db.trace.db
+/.gradle/
+/build/
+/gradle/
+/gradlew
+/gradlew.bat
+/bank_db.mv.db
