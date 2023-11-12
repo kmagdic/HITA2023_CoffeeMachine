@@ -2,7 +2,7 @@ package t4_zoran.coffeemachine;
 
 import java.sql.*;
 
-class Transaction {
+public class Transaction {
 
     private int id;
     private int coffeeTypeID;
