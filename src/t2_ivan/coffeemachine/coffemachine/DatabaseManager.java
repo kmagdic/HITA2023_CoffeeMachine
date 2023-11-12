@@ -56,6 +56,7 @@ public class DatabaseManager {
                     "date DATE NOT NULL, \n" +
                     "coffee_type INT, \n" +
                     "FOREIGN KEY(coffee_type) REFERENCES coffees(coffee_id), \n" +
+                    "sugar_amount INT NOT NULL, \n" +
                     "success BOOLEAN NOT NULL, \n" +
                     "amount INT NOT NULL\n)";
 

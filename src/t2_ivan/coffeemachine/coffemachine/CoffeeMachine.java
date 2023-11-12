@@ -22,8 +22,9 @@ public class CoffeeMachine {
     private final String statusFileName = "coffee_machine_status.txt";
     private final Logger logger;
     private final CoffeeRepository coffeeRepository;
+    private int sugar;
 
-    public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money, Logger logger, CoffeeRepository coffeeRepository) {
+    public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money, int sugar, Logger logger, CoffeeRepository coffeeRepository) {
         this.water = water;
         this.milk = milk;
         this.coffeeBeans = coffeeBeans;
@@ -31,6 +32,7 @@ public class CoffeeMachine {
         this.money = money;
         this.logger = logger;
         this.coffeeRepository = coffeeRepository;
+        this.sugar = sugar;
 
         if (coffeeRepository.getCoffees().size() != 3) {
             coffeeRepository.addCoffee(new CoffeeType(null, "Espresso", 350, 0,16,4));
@@ -65,30 +67,43 @@ public class CoffeeMachine {
         return money;
     }
 
-    public boolean hasEnoughResources(CoffeeType coffeeType){
+    private boolean hasEnoughResources(CoffeeType coffeeType, int sugarAmount){
         if (water >= coffeeType.getWaterNeeded() &&
                 milk >= coffeeType.getMilkNeeded() &&
                 coffeeBeans >= coffeeType.getCoffeeBeansNeeded() &&
-                cups >= 1) {
+                cups >= 1 && hasEnoughSugar(sugarAmount)) {
             return true;
         } else
             return false;
     }
 
-    public void buyCoffee(CoffeeType coffeeType){
-        if (hasEnoughResources(coffeeType)) {
+    public int getSugar() {
+        return sugar;
+    }
+
+    public boolean hasEnoughSugar(int sugarAmount) {
+        return sugar >= sugarAmount;
+    }
+
+    public void buyCoffee(CoffeeType coffeeType, int sugarAmount){
+        if (hasEnoughResources(coffeeType, sugarAmount)) {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
-            logger.log(coffeeType, true);
+            logger.log(coffeeType, sugarAmount, true);
 
             this.water -= coffeeType.getWaterNeeded();
             this.milk -= coffeeType.getMilkNeeded();
             this.coffeeBeans -= coffeeType.getCoffeeBeansNeeded();
             this.money += coffeeType.getPrice();
             this.cups -= 1;
+
+            if (sugarAmount > 0) {
+                System.out.println("Adding " + sugarAmount + " grams of sugar to your coffee.\n");
+                this.sugar -= sugarAmount;
+            }
         } else {
-            String missing = calculateWhichIngredientIsMissing(coffeeType);
+            String missing = calculateWhichIngredientIsMissing(coffeeType, sugarAmount);
             System.out.println("Sorry, not enough " + missing + "\n");
-            logger.log(coffeeType, false);
+            logger.log(coffeeType, sugarAmount,false);
         }
     }
 
@@ -98,7 +113,7 @@ public class CoffeeMachine {
         return moneyReturn;
     }
 
-    public String calculateWhichIngredientIsMissing(CoffeeType coffeeType){
+    public String calculateWhichIngredientIsMissing(CoffeeType coffeeType, int sugarAmount){
         String ingredientMissing = null;
         if (water < coffeeType.getWaterNeeded()) {
             ingredientMissing = "water";
@@ -111,6 +126,8 @@ public class CoffeeMachine {
         }
         else if (cups < 1) {
             ingredientMissing = "cups" ;
+        } else if (sugar < sugarAmount) {
+            ingredientMissing = "sugar";
         }
         return ingredientMissing;
     }
@@ -140,11 +157,12 @@ public class CoffeeMachine {
         return containsDigit;
     }
 
-    public void fill(int water, int milk, int coffeeBeans, int cups){
+    public void fill(int water, int milk, int coffeeBeans, int cups, int sugar){
         this.water += water;
         this.milk += milk;
         this.coffeeBeans += coffeeBeans;
         this.cups += cups;
+        this.sugar += sugar;
     }
 
     public boolean login(String username, String password) {
@@ -219,6 +237,7 @@ public class CoffeeMachine {
                 ", coffeeBeans=" + coffeeBeans +
                 ", cups=" + cups +
                 ", money=" + money +
+                ", sugar=" + sugar +
                 '}';
     }
 

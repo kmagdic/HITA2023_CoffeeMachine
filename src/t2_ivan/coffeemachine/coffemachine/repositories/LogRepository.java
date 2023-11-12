@@ -15,16 +15,17 @@ public class LogRepository {
         this.connection = connection;
     }
 
-    public void logTransaction(Date date, CoffeeType coffeeType, boolean success, int amount) {
-        String sqlInsert = "INSERT INTO logs (date, coffee_type, success, amount) VALUES (?,?,?,?)";
+    public void logTransaction(Date date, CoffeeType coffeeType, int sugarAmount, boolean success, int amount) {
+        String sqlInsert = "INSERT INTO logs (date, coffee_type, sugar_amount, success, amount) VALUES (?,?,?,?,?)";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sqlInsert);
 
             statement.setDate(1, new java.sql.Date(date.getTime()));
             statement.setInt(2, coffeeType.getId());
-            statement.setBoolean(3, success);
-            statement.setInt(4, amount);
+            statement.setInt(3, sugarAmount);
+            statement.setBoolean(4, success);
+            statement.setInt(5, amount);
 
             statement.executeUpdate();
 
@@ -42,10 +43,11 @@ public class LogRepository {
             while (resultSet.next()) {
                 Date logDate = resultSet.getDate("date");
                 int coffeeTypeId = resultSet.getInt("coffee_type");
+                int sugarAmount = resultSet.getInt("sugar_amount");
                 boolean success = resultSet.getBoolean("success");
                 int amount = resultSet.getInt("amount");
 
-                LogEntry logEntry = new LogEntry(logDate, coffeeTypeId, success, amount);
+                LogEntry logEntry = new LogEntry(logDate, coffeeTypeId, sugarAmount, success, amount);
                 resultList.add(logEntry);
             }
 
