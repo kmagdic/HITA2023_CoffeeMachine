@@ -2,19 +2,17 @@ package t4_zoran.coffeemachine;
 
 import java.sql.*;
 
-class Transaction {
+public class Transaction {
 
     private int id;
-    private Timestamp timestamp;
-    private String coffeeType;
+    private int coffeeTypeID;
     private boolean action;
     private String missing;
+    private String CoffeeTypeName;
 
-    public Transaction(String coffeeType, boolean action, String missing) {
+    public Transaction(int coffeeTypeID, boolean action, String missing) {
 
-//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm:ss");
-//        Timestamp dateTime = new Timestamp(System.currentTimeMillis());
-        this.coffeeType = coffeeType;
+        this.coffeeTypeID = coffeeTypeID;
         this.action = action;
         this.missing = missing;
     }
@@ -23,16 +21,28 @@ class Transaction {
 
     }
 
-    public void setCoffeeType(String coffeeType) {
-        this.coffeeType = coffeeType;
+    public String getCoffeeTypeName() {
+        return CoffeeTypeName;
+    }
+
+    public void setCoffeeTypeName(String coffeeTypeName) {
+        CoffeeTypeName = coffeeTypeName;
+    }
+
+    public void setCoffeeType(int coffeeTypeID) {
+        this.coffeeTypeID = coffeeTypeID;
+    }
+
+    public void setCoffeeTypeID(int coffeeTypeID) {
+        this.coffeeTypeID = coffeeTypeID;
     }
 
     public void setAction(boolean action) {
         this.action = action;
     }
 
-    public String getCoffeeType() {
-        return coffeeType;
+    public int getCoffeeTypeID() {
+        return coffeeTypeID;
     }
 
     public boolean isAction() {
@@ -44,7 +54,6 @@ class Transaction {
     }
 
     public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
     }
 
     public String getMissing() {

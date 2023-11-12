@@ -2,19 +2,33 @@ package t4_zoran.coffeemachine;
 
 public class CoffeeType {
 
+    private int coffeeTypeID;
+    private String name;
     private int waterNeeded;
     private int milkNeeded;
     private int coffeeBeansNeeded;
     private int price;
-    private String name;
 
 
-    public CoffeeType(String name, int waterNeeded, int milkNeeded, int coffeeBeansNeeded, int price) {
+    public CoffeeType(int coffeeTypeID, String name, int waterNeeded, int milkNeeded, int coffeeBeansNeeded, int price) {
+        this.coffeeTypeID = coffeeTypeID;
         this.name = name;
         this.waterNeeded = waterNeeded;
         this.milkNeeded = milkNeeded;
         this.coffeeBeansNeeded = coffeeBeansNeeded;
         this.price = price;
+    }
+
+    public CoffeeType() {
+
+    }
+
+    public int getCoffeeTypeID() {
+        return coffeeTypeID;
+    }
+
+    public void setCoffeeTypeID(int coffeeTypeID) {
+        this.coffeeTypeID = coffeeTypeID;
     }
 
     public String getName() {

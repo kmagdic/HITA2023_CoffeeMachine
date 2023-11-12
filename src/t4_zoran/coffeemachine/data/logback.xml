@@ -1,14 +1,27 @@
 <configuration>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>src\t4_zoran\coffeemachine\data\log.txt</file>
-        <append>true</append>
-        <encoder>
-            <pattern>%msg%n</pattern>
-        </encoder>
-    </appender>
+<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <file>src\t4_zoran\coffeemachine\data\log.txt</file>
+    <append>true</append>
+    <encoder>
+        <pattern>%msg%n</pattern>
+    </encoder>
+</appender>
 
-    <root level="INFO">
-        <appender-ref ref="FILE" />
-    </root>
+<!-- Define your DBAppender configuration -->
+<appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
+    <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+        <driverClass>your_database_driver_class</driverClass>
+        <url>jdbc:your_database_url</url>
+        <user>your_database_username</user>
+        <password>your_database_password</password>
+    </connectionSource>
+</appender>
+
+<root level="INFO">
+    <appender-ref ref="FILE" />
+    <!-- Add the DB appender to your root logger -->
+    <appender-ref ref="DB" />
+</root>
 </configuration>
+

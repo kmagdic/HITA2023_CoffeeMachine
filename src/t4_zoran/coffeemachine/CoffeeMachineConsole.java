@@ -2,33 +2,36 @@ package t4_zoran.coffeemachine;
 
 import java.sql.*;
 import java.util.*;
+import t4_zoran.coffeemachine.repositories.*;
 
 public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
+    static List<CoffeeType> recipeList = new ArrayList<>();
     String coffeeMachineStatusFileName = "src/t4_zoran/coffeemachine/coffee_machine_status.txt";
     static Connection conn;
 
     public static void main(String[] args)  {
 
-        conn = makeDBConnection("coffee_machines.db");
+        conn = makeDBConnection("src/t4_zoran/coffeemachine/coffee_machines.db");
 
         DatabaseManager dbm = new DatabaseManager(conn);
-
         dbm.createDatabase();
 
         CoffeeMachineConsole console = new CoffeeMachineConsole();
+
         console.start(conn);
     }
 
     void start(Connection conn) {
         CoffeeMachineWithStatusInFile machine = new CoffeeMachineWithStatusInFile(400, 540, 120, 9, 550, conn);
-        System.out.println("Welcome to Coffee Machine 2.3 version by Zoran");
+        System.out.println("Welcome to Coffee Machine 2.4 version by Zoran");
 
         boolean loadedSuccessfully  = machine.loadFromFile(coffeeMachineStatusFileName);
         if(!loadedSuccessfully) {
             System.out.println("Coffee machine status file is not found. Using default values.");
         }
+
 
         String action = "";
 
@@ -66,15 +69,24 @@ public class CoffeeMachineConsole {
 
     private void buyAction(CoffeeMachine machine) {
         System.out.println("Choice: ");
-        CoffeeType[] coffeeTypes = machine.getCoffeeTypes();
-        for (int i = 0; i < machine.getCoffeeTypes().length; i++) {
-            System.out.println((i + 1) + " - " + coffeeTypes[i].getName());
+//        CoffeeType[] coffeeTypes = machine.getCoffeeTypes();
+//        for (int i = 0; i < machine.getCoffeeTypes().length; i++) {
+//            System.out.println((i + 1) + " - " + coffeeTypes[i].getName());
+//        }
+        recipeList = machine.getCoffeeTypes();
+        for (CoffeeType c : recipeList){
+            System.out.println(c.getCoffeeTypeID() + " - " + c.getName());
         }
+
         System.out.println("Enter your choice: ");
 
         int typeOfCoffeeChoice = sc.nextInt();
-        if (typeOfCoffeeChoice <= coffeeTypes.length) {
-            machine.buyCoffee(coffeeTypes[typeOfCoffeeChoice - 1]);
+        if (typeOfCoffeeChoice <= recipeList.size()) {
+            for (CoffeeType c : recipeList){
+                if (c.getCoffeeTypeID() == typeOfCoffeeChoice) {
+                    machine.buyCoffee(c);
+                }
+            }
         } else {
             System.out.println("Wrong enter\n");
         }
@@ -132,11 +144,11 @@ public class CoffeeMachineConsole {
                     }
 
                 case "log":
-                    DatabaseManager dbm = new DatabaseManager(conn);
-                    List<Transaction> transactionList = dbm.transactionList();
+                    TransactionRepository tr = new TransactionRepository(conn);
+                    List<Transaction> transactionList = tr.transactionList();
                     for (Transaction t : transactionList) {
                         System.out.print("Date/time: " + t.getTimestamp() + ", coffee type: " +
-                                t.getCoffeeType() + ", action: ");
+                                t.getCoffeeTypeName() + ", action: ");
                         if (t.getMissing() == null) {
                             System.out.println("Bought");
                         } else {
