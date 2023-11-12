@@ -11,7 +11,7 @@ public class CoffeeMachineConsole {
 
     public static void main(String[] args)  {
 
-        conn = makeDBConnection("coffee_machines.db");
+        conn = makeDBConnection("src/t4_zoran/coffeemachine/coffee_machines.db");
 
         DatabaseManager dbm = new DatabaseManager(conn);
 
@@ -136,7 +136,7 @@ public class CoffeeMachineConsole {
                     List<Transaction> transactionList = dbm.transactionList();
                     for (Transaction t : transactionList) {
                         System.out.print("Date/time: " + t.getTimestamp() + ", coffee type: " +
-                                t.getCoffeeType() + ", action: ");
+                                t.getCoffeeTypeName() + ", action: ");
                         if (t.getMissing() == null) {
                             System.out.println("Bought");
                         } else {
