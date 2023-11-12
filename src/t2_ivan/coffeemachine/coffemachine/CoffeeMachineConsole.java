@@ -1,5 +1,8 @@
 package t2_ivan.coffeemachine.coffemachine;
 
+import t2_ivan.coffeemachine.coffemachine.repositories.CoffeeRepository;
+import t2_ivan.coffeemachine.coffemachine.repositories.LogRepository;
+
 import java.util.Scanner;
 
 public class CoffeeMachineConsole {
@@ -20,7 +23,7 @@ public class CoffeeMachineConsole {
         Logger logger = new Logger(logRepository);
 
         CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550, logger, coffeeRepository);
-        System.out.println("Welcome to Coffee Machine 1.0 version Ivan");
+        System.out.println("Welcome to Coffee Machine 3.0 version Ivan");
         boolean startedSuccessfully = machine.start();
 
         if(!startedSuccessfully) {

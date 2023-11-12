@@ -1,8 +1,9 @@
 package t2_ivan.coffeemachine.coffemachine;
 
-import java.text.SimpleDateFormat;
+
+import t2_ivan.coffeemachine.coffemachine.repositories.LogRepository;
+
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Logger {
@@ -18,7 +19,15 @@ public class Logger {
         logRepository.logTransaction(currentDate, coffee, success, 1);
     }
 
-    void printLog() {
-        //TODO: Dodati sql query za dohvacanje svih logova, slicno kao za dohvacanje svih kava
+    public void printLog() {
+        List<LogEntry> logs = logRepository.getAllLogs();
+
+        for (LogEntry logEntry : logs) {
+            System.out.println("Date: " + logEntry.getDate());
+            System.out.println("Coffee Type ID: " + logEntry.getCoffeeTypeId());
+            System.out.println("Success: " + logEntry.isSuccess());
+            System.out.println("Amount: " + logEntry.getAmount());
+            System.out.println();
+        }
     }
 }

@@ -1,5 +1,7 @@
 package t2_ivan.coffeemachine.coffemachine;
 
+import t2_ivan.coffeemachine.coffemachine.repositories.CoffeeRepository;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;

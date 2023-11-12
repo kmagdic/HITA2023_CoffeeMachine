@@ -1,6 +1,6 @@
-package t2_ivan.coffeemachine.coffemachine;
+package t2_ivan.coffeemachine.coffemachine.repositories;
 
-import _karlo_dragan.bankclientdb.Client;
+import t2_ivan.coffeemachine.coffemachine.CoffeeType;
 
 import java.sql.*;
 import java.util.ArrayList;
