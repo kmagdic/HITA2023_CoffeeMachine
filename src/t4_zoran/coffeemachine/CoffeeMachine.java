@@ -24,9 +24,9 @@ public class CoffeeMachine {
         this.money = money;
         this.conn = conn;
 
-        coffeeTypes[0] = new CoffeeType("Espresso", 350, 0, 16, 4);
-        coffeeTypes[1] = new CoffeeType("Latte",350, 75, 20, 7);
-        coffeeTypes[2] = new CoffeeType("Capuccino", 200, 100, 12, 6);
+        coffeeTypes[0] = new CoffeeType(1, "Espresso", 350, 0, 16, 4);
+        coffeeTypes[1] = new CoffeeType(2, "Latte",350, 75, 20, 7);
+        coffeeTypes[2] = new CoffeeType(3, "Capuccino", 200, 100, 12, 6);
     }
 
     public CoffeeType[] getCoffeeTypes() {
@@ -114,7 +114,7 @@ public class CoffeeMachine {
             success = false;
         }
 
-        Transaction transaction = new Transaction(coffeeType.getName(), success, missing);
+        Transaction transaction = new Transaction(coffeeType.getCoffeeTypeID(), success, missing);
 
         DatabaseManager dbm = new DatabaseManager(conn);
         dbm.insertTransaction(transaction);

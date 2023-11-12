@@ -72,10 +72,11 @@ public class ClientRepository {
         }
     }
     public static Client findClient (String oib){
-        for (Client c: clientList){
+        for (Client c: BankConsoleMain.clientList){
             if (oib.equals(c.getOib())){
                 return c;
             }
         }
+        return null;
     }
 }

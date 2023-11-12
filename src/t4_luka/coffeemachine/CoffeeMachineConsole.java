@@ -15,13 +15,18 @@ public class CoffeeMachineConsole {
             throw new RuntimeException(e);
         }
     }
-    public static void createSchema(Connection conn) {
+    public static void createCoffeeType(Connection conn) {
 
         String createTableSql =
-                "CREATE TABLE IF NOT EXISTS Log (\n" +
+                "CREATE TABLE IF NOT EXISTS CoffeeType (\n" +
                         "    ID INT AUTO_INCREMENT PRIMARY KEY,\n" +
-                        "    Date VARCHAR(255) NOT NULL,\n" +
-                        "    Message VARCHAR(255) NOT NULL\n);";
+                        "    Name VARCHAR(255) NOT NULL,\n" +
+                        "    Water INT NOT NULL,\n" +
+                        "    Milk INT NOT NULL,\n" +
+                        "    CoffeeBeans INT NOT NULL,\n" +
+                        "    Price INT NOT NULL,\n" +
+                        "    Cups INT NOT NULL\n" +
+                        "    );";
 
 
         try {
@@ -35,23 +40,121 @@ public class CoffeeMachineConsole {
         }
 
     }
-    public static void addLog(String date, String message) {
-        String sql = "INSERT INTO Log(Date, Message) VALUES(?, ?)";
+    public static void createTransactionLog(Connection conn) {
+
+        String createTableSql =
+                "CREATE TABLE IF NOT EXISTS TransactionLog (\n" +
+                        "    ID INT AUTO_INCREMENT PRIMARY KEY,\n" +
+                        "    DateTime VARCHAR(255) NOT NULL,\n" +
+                        "    CoffeeTypeID INT NOT NULL,\n" +
+                        "    FOREIGN KEY (CoffeeTypeID) REFERENCES CoffeeType(ID),\n" +
+                        "    Success VARCHAR(255) NOT NULL\n" +
+                        "    );";
+
+
+        try {
+
+            Statement stmt = conn.createStatement();
+
+            // create a new table if it doesn't exist
+            stmt.execute(createTableSql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static void addTransactionLog(String dateTime, int coffeeTypeID, String success) {
+        String sql = "INSERT INTO TransactionLog(DateTime, CoffeeTypeID, Success) VALUES(?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, date);
-            pstmt.setString(2, message);
+            pstmt.setString(1, dateTime);
+            pstmt.setInt(2, coffeeTypeID);
+            pstmt.setString(3, success);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
+    public static int returnNumberOfCoffeeTypes(Connection conn){
+        String query = "SELECT MAX(ID) FROM CoffeeType";
+        int id=0;
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            // Execute the SELECT query
+            ResultSet resultSet = pstmt.executeQuery();
+            id = resultSet.getInt("ID");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return id;
+    }
+    public static void insertCoffeeTypes() {
+        String sql = "INSERT INTO CoffeeType (Name, Water, Milk, CoffeeBeans, Price, Cups) VALUES(?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, "Espresso");
+                pstmt.setInt(2, 350);
+                pstmt.setInt(3, 0);
+                pstmt.setInt(4, 16);
+                pstmt.setInt(5, 4);
+                pstmt.setInt(6, 1);
+                pstmt.executeUpdate();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, "Latte");
+                pstmt.setInt(2, 350);
+                pstmt.setInt(3, 75);
+                pstmt.setInt(4, 20);
+                pstmt.setInt(5, 7);
+                pstmt.setInt(6, 1);
+                pstmt.executeUpdate();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, "Capuccino");
+                pstmt.setInt(2, 200);
+                pstmt.setInt(3, 100);
+                pstmt.setInt(4, 12);
+                pstmt.setInt(5, 6);
+                pstmt.setInt(6, 1);
+                pstmt.executeUpdate();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        public static void printLog(Connection conn){
+            String query = "SELECT DateTime, Name, Success FROM TransactionLog JOIN CoffeeType ON CoffeeTypeID=CoffeeType.ID;";
+            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                // Execute the SELECT query
+                ResultSet resultSet = pstmt.executeQuery();
+
+                // Process the result set
+                while (resultSet.next()) {
+                    // Retrieve data from the result set
+                    // Assuming 'id' is a column in your 'Log' table
+                    String dateTime = resultSet.getString("DateTime");
+                    String name = resultSet.getString("Name");
+                    String success = resultSet.getString("Success"); // Assuming 'message' is a column in your 'Log' table
+
+                    // Do something with the retrieved data
+                    System.out.println("DateTime: " + dateTime + ", Name: " + name + ", Success: " + success);
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+    }
 
     public static void main(String[] args)  {
         CoffeeMachineConsole console = new CoffeeMachineConsole();
-
+        CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550);
         makeDBConnection("./banksystem.h2");
-        createSchema(conn);
+        createCoffeeType(conn);
+        createTransactionLog(conn);
+        if (returnNumberOfCoffeeTypes(conn)!=3){
+            insertCoffeeTypes();
+        }
 
         console.run();
     }
@@ -171,9 +274,10 @@ public class CoffeeMachineConsole {
                     break;
 
                 case "log":
+                    printLog(conn);
                     //for (Transaction t: machine.logList)
                     //System.out.println(t.getCroatianDateStr() + " "+  t.getWhatHappened());
-                    String query = "SELECT * FROM Log";
+                    /*String query = "SELECT * FROM Log";
 
                     try (PreparedStatement pstmt = conn.prepareStatement(query)) {
                         // Execute the SELECT query
@@ -191,7 +295,7 @@ public class CoffeeMachineConsole {
                         }
                     } catch (SQLException e) {
                         System.out.println(e.getMessage());
-                    }
+                    }*/
                     break;
 
                 case "exit":
@@ -200,7 +304,4 @@ public class CoffeeMachineConsole {
             }
         }
     }
-
-
-
 }
