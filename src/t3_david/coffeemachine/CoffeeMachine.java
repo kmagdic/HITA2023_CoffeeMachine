@@ -20,6 +20,10 @@ public class CoffeeMachine {
 
 
 
+
+
+
+
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
     private String statusFileName = "coffee_machine_status.txt";
@@ -76,6 +80,8 @@ public class CoffeeMachine {
             System.out.println("I have enough resources, making you " + coffeeType.getName() + "\n");
 
 
+
+
             this.water -= coffeeType.getWaterNeeded();
             this.milk -= coffeeType.getMilkNeeded();
             this.coffeeBeans -= coffeeType.getCoffeeBeansNeeded();
@@ -84,6 +90,7 @@ public class CoffeeMachine {
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
+
 
         }
     }
@@ -168,6 +175,12 @@ public class CoffeeMachine {
 
         } catch (IOException e) {
             throw new RuntimeException(e);
+
+
+
+
+
+
         }
     }
 
@@ -189,6 +202,10 @@ public class CoffeeMachine {
             adminPassword = newPassword;
         }
 
+
+
+
+
         @Override
         public String toString() {
             return "CoffeeMachine{" +
@@ -202,3 +219,4 @@ public class CoffeeMachine {
 
 
     }
+

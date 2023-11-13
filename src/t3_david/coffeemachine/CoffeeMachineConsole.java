@@ -67,7 +67,8 @@ public class CoffeeMachineConsole {
 
         int typeOfCoffeeChoice = sc.nextInt();
         if (typeOfCoffeeChoice <= coffeeTypes.length) {
-            machine.buyCoffee(coffeeTypes[typeOfCoffeeChoice - 1]);
+            CoffeeType selectedCoffee = coffeeTypes[typeOfCoffeeChoice - 1];
+
         } else {
             System.out.println("Wrong enter\n");
         }
@@ -117,6 +118,8 @@ public class CoffeeMachineConsole {
                         System.out.println("Please enter a stronger password!It has to be at least 7 characters and must have at least one number.\n");
                     }
                     break;
+
+
 
 
 
