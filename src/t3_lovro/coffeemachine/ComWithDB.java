@@ -86,11 +86,13 @@ public class ComWithDB {
             pstmt.setInt(4, coffeeType.getCoffeeBeansNeeded());
             pstmt.setInt(5, coffeeType.getPrice());
             pstmt.executeUpdate();
+            System.out.println("CoffeeType added! ");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
+    // Transaction
     public void addTransactionToLog(CoffeeType coffeeType, String action) {
         String sql = "INSERT INTO machine_log(date_time, coffee_type_id, action) VALUES(?, ?, ?)";
         java.util.Date date = new Date(System.currentTimeMillis());
@@ -121,6 +123,14 @@ public class ComWithDB {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public void close(){
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

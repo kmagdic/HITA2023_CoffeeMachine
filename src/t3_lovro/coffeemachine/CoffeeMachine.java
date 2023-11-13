@@ -27,7 +27,7 @@ public class CoffeeMachine {
 
     static List<CoffeeType> coffeeType = new ArrayList<>();
     private String adminUsername = "admin";
-    private String adminPassword = "admin12345";
+    private String adminPassword = "Admin12345";
     private final String statusFileName = "coffeemachine.txt";
 
 
