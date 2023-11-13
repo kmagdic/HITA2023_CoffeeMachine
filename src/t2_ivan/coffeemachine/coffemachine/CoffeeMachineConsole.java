@@ -1,22 +1,29 @@
-package t2_ivan.coffeemachine;
+package t2_ivan.coffeemachine.coffemachine;
+
+import t2_ivan.coffeemachine.coffemachine.repositories.CoffeeRepository;
+import t2_ivan.coffeemachine.coffemachine.repositories.LogRepository;
 
 import java.util.Scanner;
 
 public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
-
+    private static CoffeeRepository coffeeRepository;
+    private static LogRepository logRepository;
 
     public static void main(String[] args)  {
+        DatabaseManager db = new DatabaseManager("ivan_coffee");
+        coffeeRepository = new CoffeeRepository(db.getConnection());
+        logRepository = new LogRepository(db.getConnection());
         CoffeeMachineConsole console = new CoffeeMachineConsole();
         console.run();
     }
 
     void run() {
-        Logger logger = new Logger();
+        Logger logger = new Logger(logRepository);
 
-        CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550, logger);
-        System.out.println("Welcome to Coffee Machine 1.0 version Ivan");
+        CoffeeMachine machine = new CoffeeMachine(400, 540, 120, 9, 550, 50, logger, coffeeRepository);
+        System.out.println("Welcome to Coffee Machine 3.0 version Ivan");
         boolean startedSuccessfully = machine.start();
 
         if(!startedSuccessfully) {
@@ -67,8 +74,12 @@ public class CoffeeMachineConsole {
         System.out.println("Enter your choice: ");
 
         int typeOfCoffeeChoice = sc.nextInt();
+
+        System.out.println("Enter how many grams of sugar you want:");
+        int sugar = sc.nextInt();
+
         if (typeOfCoffeeChoice <= coffeeTypes.length) {
-            machine.buyCoffee(coffeeTypes[typeOfCoffeeChoice - 1]);
+            machine.buyCoffee(coffeeTypes[typeOfCoffeeChoice - 1], sugar);
         } else {
             System.out.println("Wrong enter\n");
         }
@@ -89,9 +100,11 @@ public class CoffeeMachineConsole {
                     int milk = sc.nextInt();
                     System.out.println("Write how many grams of coffee beans you want to add:");
                     int coffeeBeans = sc.nextInt();
+                    System.out.println("Write how many grams of sugar you want to add:");
+                    int sugar = sc.nextInt();
                     System.out.println("\"Write how many disposable cups you want to add: ");
                     int cup = sc.nextInt();
-                    machine.fill(water, milk, coffeeBeans, cup);
+                    machine.fill(water, milk, coffeeBeans, cup, sugar);
                     break;
 
                 case "take":
@@ -103,8 +116,9 @@ public class CoffeeMachineConsole {
                     System.out.println("The coffee machine has:");
                     System.out.println(machine.getWater() + " ml of water");
                     System.out.println(machine.getMilk() + " ml of milk");
-                    System.out.println(machine.getCoffeeBeans() + " g of water");
+                    System.out.println(machine.getCoffeeBeans() + " g of coffee beans");
                     System.out.println(machine.getCups() + " cups");
+                    System.out.println(machine.getSugar() + " sugar");
                     System.out.println("$" + machine.getMoney() + " of money");
                     break;
 
@@ -123,7 +137,4 @@ public class CoffeeMachineConsole {
             }
         }
     }
-
-
-
 }

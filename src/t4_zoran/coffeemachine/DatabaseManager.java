@@ -1,7 +1,6 @@
 package t4_zoran.coffeemachine;
 
 import java.sql.*;
-import java.util.*;
 
 public class DatabaseManager {
 
@@ -45,39 +44,4 @@ public class DatabaseManager {
             throw new RuntimeException(e);
         }
     }
-
-//    public List<Transaction> transactionList() {
-//
-//        String sqlAllTransactions = "SELECT ID_Transaction, time_stamp, missing_ingredient," +
-//                " c.name as CoffeeName FROM transaction t" +
-//                " join coffee_type c on t.coffee_type_ID = c.ID_coffee_type";
-//
-//        List<Transaction> resultList = new ArrayList<>();
-//
-//        try {
-//            Statement st = conn.createStatement();
-//            ResultSet rs = st.executeQuery(sqlAllTransactions);
-//
-//            while (rs.next()){
-//                Transaction t = new Transaction();
-//                t.setId(rs.getInt("ID_Transaction"));
-//                t.setTimestamp(Timestamp.valueOf(rs.getString("time_stamp")));
-//                t.setMissing(rs.getString("missing_ingredient"));
-//                t.setCoffeeTypeName(rs.getString("CoffeeName"));
-//
-//                resultList.add(t);
-//            }
-//
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return resultList;
-//    }
-
-//    this gives ingredients in a row
-//    SELECT group_concat(r.ingredient_amount separator  ', ') AS ingredient_amounts
-//    FROM recipe r
-//    JOIN coffee_type c ON c.ID_coffee_type = r.coffee_type_ID
-//    JOIN ingredient i ON r.ingredient_ID = i.ID_ingredient
-//    WHERE r.coffee_type_id= 1
 }

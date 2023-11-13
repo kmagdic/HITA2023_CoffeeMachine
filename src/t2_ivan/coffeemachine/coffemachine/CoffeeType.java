@@ -1,20 +1,25 @@
-package t2_ivan.coffeemachine;
+package t2_ivan.coffeemachine.coffemachine;
 
 public class CoffeeType {
 
+    private Integer id;
     private int milkNeeded;
     private int waterNeeded;
     private int coffeeBeansNeeded;
     private int price;
     private String name;
 
-
-    public CoffeeType(String name, int waterNeeded, int milkNeeded, int coffeeBeansNeeded, int price) {
+    public CoffeeType(Integer id, String name, int waterNeeded, int milkNeeded, int coffeeBeansNeeded, int price) {
+        this.id = id;
         this.milkNeeded = milkNeeded;
         this.waterNeeded = waterNeeded;
         this.coffeeBeansNeeded = coffeeBeansNeeded;
         this.price = price;
         this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getName() {

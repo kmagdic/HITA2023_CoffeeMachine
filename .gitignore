@@ -38,6 +38,10 @@ bin/
 /banksystem.h2.trace.db
 /coffeemachine.h2.mv.db
 /coffeemachine.h2.trace.db
+/ivan_bank.mv.db
+/ivan_bank.trace.db
+/ivan_coffee.mv.db
+/ivan_coffee.trace.db
 /bank.db.mv.db
 /bank.db.trace.db
 /.gradle/
@@ -46,3 +50,5 @@ bin/
 /gradlew
 /gradlew.bat
 /bank_db.mv.db
+/coffeemachine.mv.db
+/coffeemachine.trace.db

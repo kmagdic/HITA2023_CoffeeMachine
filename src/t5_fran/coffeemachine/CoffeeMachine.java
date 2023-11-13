@@ -23,7 +23,8 @@ public class CoffeeMachine {
 
     private String adminUsername = "admin";
     private String adminPassword = "admin12345";
-    private String statusFileName = "coffee_machine_status.txt";;
+    private String statusFileName = "coffee_machine_status.txt";
+    private Connector dbConnector;
 
     public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money) {
         this.water = water;
@@ -31,6 +32,17 @@ public class CoffeeMachine {
         this.coffeeBeans = coffeeBeans;
         this.cups = cups;
         this.money = money;
+
+        String fileName = "./cmtransactions.h2";
+        dbConnector = new Connector(fileName);
+        String createTableSql =
+                "CREATE TABLE IF NOT EXISTS transaction_log (\n" +
+                        "    id INT AUTO_INCREMENT PRIMARY KEY,\n" +
+                        "    dateTime VARCHAR(255) NOT NULL,\n" +
+                        "    coffeeType VARCHAR(255) NOT NULL,\n" +
+                        "    action VARCHAR(255) NOT NULL\n" +
+                        ");";
+        dbConnector.createSchema(createTableSql);
 
         coffeeTypes[0] = new CoffeeType("Espresso", 350, 0,16,4);
         coffeeTypes[1] = new CoffeeType("Latte",350, 75,20,7);
@@ -61,19 +73,19 @@ public class CoffeeMachine {
         return money;
     }
 
-    public List<Transaction> getTransactions(Connection conn) {
+    public List<Transaction> getTransactions() {
 
         String sql = "SELECT * from transaction_log";
 
         try {
-            Statement stmt = conn.createStatement();
+            Statement stmt = dbConnector.getConn().createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             List<Transaction> transactions = new ArrayList<>();
             while (rs.next()) {
                 String dateTime = rs.getString("dateTime");
                 String coffeeType = rs.getString("coffeeType");
                 String action = rs.getString("action");
-                transactions.add(new Transaction(coffeeType, action));
+                transactions.add(new Transaction(coffeeType, action, dbConnector));
             }
             return transactions;
         } catch (SQLException e) {
@@ -106,12 +118,12 @@ public class CoffeeMachine {
             this.money += coffeeType.getPrice();
             this.cups -= 1;
 
-            new Transaction(coffeeType.getName(), "Bought");
+            new Transaction(coffeeType.getName(), "Bought", dbConnector);
         } else {
             String missing = calculateWhichIngredientIsMissing(coffeeType);
             System.out.println("Sorry, not enough " + missing + "\n");
 
-            new Transaction(coffeeType.getName(), "Failed purchase - missing: " + missing);
+            new Transaction(coffeeType.getName(), "Failed purchase - missing: " + missing, dbConnector);
         }
     }
 

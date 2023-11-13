@@ -19,9 +19,7 @@ public class CoffeeType {
         this.price = price;
     }
 
-    public CoffeeType() {
-
-    }
+    public CoffeeType() {}
 
     public int getCoffeeTypeID() {
         return coffeeTypeID;
@@ -70,5 +68,4 @@ public class CoffeeType {
     public void setCoffeeBeansNeeded(int coffeeBeansNeeded) {
         this.coffeeBeansNeeded = coffeeBeansNeeded;
     }
-
 }

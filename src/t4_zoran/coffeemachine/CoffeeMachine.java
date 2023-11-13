@@ -15,8 +15,8 @@ public class CoffeeMachine {
 
     private List<CoffeeType> coffeeTypes = new ArrayList<>();
 
-    private String adminUsername = "admin";
-    private String adminPassword = "admin123";
+    private String adminUsername;
+    private String adminPassword;
 
     public CoffeeMachine(int water, int milk, int coffeeBeans, int cups, float money, Connection conn) {
         this.water = water;
