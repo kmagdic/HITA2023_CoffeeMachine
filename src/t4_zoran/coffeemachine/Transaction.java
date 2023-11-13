@@ -17,9 +17,7 @@ public class Transaction {
         this.missing = missing;
     }
 
-    public Transaction() {
-
-    }
+    public Transaction() {}
 
     public String getCoffeeTypeName() {
         return CoffeeTypeName;

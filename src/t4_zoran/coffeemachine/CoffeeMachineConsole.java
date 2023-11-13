@@ -10,28 +10,31 @@ public class CoffeeMachineConsole {
     static List<CoffeeType> recipeList = new ArrayList<>();
     String coffeeMachineStatusFileName = "src/t4_zoran/coffeemachine/coffee_machine_status.txt";
     static Connection conn;
+    public static String coffeeMachineName = "kr01";
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws SQLException {
 
         conn = makeDBConnection("src/t4_zoran/coffeemachine/coffee_machines.db");
-
-        DatabaseManager dbm = new DatabaseManager(conn);
-        dbm.createDatabase();
 
         CoffeeMachineConsole console = new CoffeeMachineConsole();
 
         console.start(conn);
     }
 
-    void start(Connection conn) {
+    void start(Connection conn) throws SQLException {
+        DatabaseManager dbm = new DatabaseManager(conn);
+        dbm.createDatabase();
+        CoffeeMachineRepository cmr = new CoffeeMachineRepository(conn);
+        cmr.createStatusOfCoffeeMachine();
         CoffeeMachineWithStatusInFile machine = new CoffeeMachineWithStatusInFile(400, 540, 120, 9, 550, conn);
-        System.out.println("Welcome to Coffee Machine 2.4 version by Zoran");
+        System.out.println("Welcome to Coffee Machine 2.5 version by Zoran");
+        System.out.println("Mantained by administrator " + machine.getAdminUsername());
+        System.out.println("Located on Avenija plišanih majmuna 99");
 
-        boolean loadedSuccessfully  = machine.loadFromFile(coffeeMachineStatusFileName);
+        boolean loadedSuccessfully  = machine.loadFromDatabase(cmr.coffeeMachineStatus());
         if(!loadedSuccessfully) {
             System.out.println("Coffee machine status file is not found. Using default values.");
         }
-
 
         String action = "";
 
@@ -69,10 +72,7 @@ public class CoffeeMachineConsole {
 
     private void buyAction(CoffeeMachine machine) {
         System.out.println("Choice: ");
-//        CoffeeType[] coffeeTypes = machine.getCoffeeTypes();
-//        for (int i = 0; i < machine.getCoffeeTypes().length; i++) {
-//            System.out.println((i + 1) + " - " + coffeeTypes[i].getName());
-//        }
+
         recipeList = machine.getCoffeeTypes();
         for (CoffeeType c : recipeList){
             System.out.println(c.getCoffeeTypeID() + " - " + c.getName());
@@ -171,5 +171,4 @@ public class CoffeeMachineConsole {
             throw new RuntimeException(e);
         }
     }
-
 }

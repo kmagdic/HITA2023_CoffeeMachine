@@ -31,7 +31,6 @@ public class CoffeeTypeRepository {
                 "LEFT JOIN ingredient beans ON beans_recipe.ingredient_ID = beans.ID_ingredient\n" +
                 "GROUP BY c.ID_coffee_type, c.name";
 
-
         try {
             Statement st = conn.createStatement();
 
