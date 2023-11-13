@@ -5,9 +5,8 @@ import java.util.Scanner;
 public class CoffeeMachineConsole {
 
     Scanner sc = new Scanner(System.in);
-
     String fileName = "src/t3_lovro/coffeemachine/coffeemachine.txt";
-    static String dBPath = "./coffeemachine.h2";
+    String dBPath = "./coffeemachine.h2";
     ComWithDB comWithDB = new ComWithDB(dBPath);
 
     public static void main(String[] args) {
@@ -51,6 +50,7 @@ public class CoffeeMachineConsole {
                 case "exit":
                     machine.saveToFile(fileName);
                     machine.stop();
+                    comWithDB.close();
                     System.out.println("Shutting down the machine. Bye!");
                     break;
 
@@ -65,7 +65,7 @@ public class CoffeeMachineConsole {
             System.out.println("Choice: ");
             CoffeeMachine.coffeeType = comWithDB.coffeeType();
             for (CoffeeType c : CoffeeMachine.coffeeType) {
-                System.out.println(c.getId() + ". " + c.getName() + " " + c.getPrice());
+                System.out.println(c.getId() + ". " + c.getName() + " " + c.getPrice() + "$");
             }
             System.out.println();
             System.out.println("Enter your choice: ");
@@ -140,7 +140,7 @@ public class CoffeeMachineConsole {
                             System.out.println("Password is changed ");
                             i = false;
                         } else {
-                            System.out.println("Please enter stronger password! It has to be at least 7 characters and it needs to have at least one number ");
+                            System.out.println("Please enter stronger password! It has to be at least 7 characters and it needs to have at least one number and one big letter ");
                         }
                     }
                     break;
@@ -157,13 +157,14 @@ public class CoffeeMachineConsole {
                     int newWater = sc.nextInt();
                     System.out.println("How much coffee beans is needed for new coffee type? ");
                     int newCoffee = sc.nextInt();
-                    System.out.println("What ll be the price for new coffee type ? ");
+                    System.out.println("What will be the price for new coffee type ? ");
                     int newPrice = sc.nextInt();
                     CoffeeType newCoffeeType = new CoffeeType(name, newMilk, newWater, newCoffee, newPrice);
                     comWithDB.addCoffeeTypesToDB(newCoffeeType);
                     break;
                 case "exit":
                     machine.saveToFile(fileName);
+
                     break;
 
             }
