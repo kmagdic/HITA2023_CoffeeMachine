@@ -64,16 +64,17 @@ public class CoffeeMachineConsole {
         if (3 <= CoffeeMachine.coffeeType.size()) {
             System.out.println("Choice: ");
             CoffeeMachine.coffeeType = comWithDB.coffeeType();
+            int counter = 1;
             for (CoffeeType c : CoffeeMachine.coffeeType) {
-                System.out.println(c.getId() + ". " + c.getName() + " " + c.getPrice() + "$");
+                System.out.println((counter++) + ". " + c.getName() + " " + c.getPrice() + "$");
             }
             System.out.println();
             System.out.println("Enter your choice: ");
 
             int typeOfCoffeeChoice = sc.nextInt();
-            if (typeOfCoffeeChoice <= CoffeeMachine.coffeeType.size() - 1) {
-                String c = machine.buyCoffee(CoffeeMachine.coffeeType.get(typeOfCoffeeChoice));
-                comWithDB.addTransactionToLog(CoffeeMachine.coffeeType.get(typeOfCoffeeChoice), c);
+            if (typeOfCoffeeChoice <= CoffeeMachine.coffeeType.size()) {
+                String c = machine.buyCoffee(CoffeeMachine.coffeeType.get(typeOfCoffeeChoice - 1));
+                comWithDB.addTransactionToLog(CoffeeMachine.coffeeType.get(typeOfCoffeeChoice - 1), c);
             } else {
                 System.out.println("Wrong enter\n");
             }

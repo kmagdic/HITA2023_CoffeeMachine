@@ -111,7 +111,7 @@ public class ComWithDB {
         Statement statement;
         try {
             statement = conn.createStatement();
-            String sqlUpit = "SELECT date_time, name , action FROM machine_log JOIN coffee_types ON  coffee_type_id = id_coffee_type";
+            String sqlUpit = "SELECT date_time, name, action FROM machine_log JOIN coffee_types ON  coffee_type_id = id_coffee_type";
             ResultSet rezultat = statement.executeQuery(sqlUpit);
             while (rezultat.next()) {
                 String dateTime = rezultat.getString("date_time");
