@@ -144,14 +144,21 @@ public class CoffeeMachineConsole {
                             machine.setAdminPassword(newPass);
                             ultimatePass = true;
                         } else {
-                            System.out.println("Please enter stronger password! It has to be a least 7 characters and it needs has at least one number.");
+                            System.out.println("Please enter stronger password! It has to be a least 7 characters and it needs to have at least one number.");
                         }
 
                     }
                     break;
 
                 case "log":
-                    System.out.println(machine.getTransactions(conn));
+                    List<Transaction> theTransactions = machine.getTransactions();
+
+                    for (Transaction aTransaction : theTransactions) {
+
+                        System.out.println(aTransaction.getTransactionInfo());
+
+                    }
+
                     break;
 
                 case "exit":

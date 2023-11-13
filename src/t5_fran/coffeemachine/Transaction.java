@@ -6,65 +6,27 @@ import java.time.format.DateTimeFormatter;
 
 public class Transaction {
 
-    private static Connection conn;
-
     private String dateTime;
     private String coffeeType;
     private String action;
+    private Connector dbConnector;
 
-    public Transaction(String typeOfCoffee, String theAction) {
+    public Transaction(String typeOfCoffee, String theAction, Connector theConnector) {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm:ss");
         dateTime = dtf.format(LocalDateTime.now());
         coffeeType = typeOfCoffee;
         action = theAction;
+        dbConnector = theConnector;
 
-        makeDBConnection("./cmtransactions.h2");
-        createSchema(conn);
         addTransaction(dateTime, coffeeType, action);
 
     }
 
-    public String getTransactionInfo() {
-
-        String transactionInfo = "Date/time: " + dateTime + ", coffee type: " + coffeeType + ", action: " + action;
-        return transactionInfo;
-
-    }
-
-    private void makeDBConnection(String fileName) {
-        try {
-            conn = DriverManager.getConnection("jdbc:h2:" + fileName);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static void createSchema(Connection conn) {
-
-        String createTableSql =
-                "CREATE TABLE IF NOT EXISTS transaction_log (\n" +
-                        "    id INT AUTO_INCREMENT PRIMARY KEY,\n" +
-                        "    dateTime VARCHAR(255) NOT NULL,\n" +
-                        "    coffeeType VARCHAR(255) NOT NULL,\n" +
-                        "    action VARCHAR(255) NOT NULL\n" +
-                        ");";
-
-        try {
-
-            Statement stmt = conn.createStatement();
-
-            stmt.execute(createTableSql);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-    }
-
-    public static void addTransaction(String dateTime, String coffeeType, String action) {
+    public void addTransaction(String dateTime, String coffeeType, String action) {
         String sql = "INSERT INTO transaction_log(dateTime, coffeeType, action) VALUES(?, ?, ?)";
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = dbConnector.getConn().prepareStatement(sql)) {
             pstmt.setString(1, dateTime);
             pstmt.setString(2, coffeeType);
             pstmt.setString(3, action);
@@ -72,6 +34,13 @@ public class Transaction {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public String getTransactionInfo() {
+
+        String transactionInfo = "Date/time: " + dateTime + ", coffee type: " + coffeeType + ", action: " + action;
+        return transactionInfo;
+
     }
 
 }
