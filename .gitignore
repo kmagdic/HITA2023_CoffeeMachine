@@ -50,3 +50,5 @@ bin/
 /gradlew
 /gradlew.bat
 /bank_db.mv.db
+/coffeemachine.mv.db
+/coffeemachine.trace.db
